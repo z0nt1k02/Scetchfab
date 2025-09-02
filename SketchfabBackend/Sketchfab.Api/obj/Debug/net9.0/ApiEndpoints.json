@@ -1,0 +1,12 @@
+[
+  {
+    "ContainingType": "Sketchfab.Api.Controllers.ModelController",
+    "Method": "GetModel",
+    "RelativePath": "api/Model/getmodel",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]

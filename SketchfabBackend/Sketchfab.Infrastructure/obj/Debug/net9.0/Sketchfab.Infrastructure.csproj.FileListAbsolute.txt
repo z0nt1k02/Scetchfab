@@ -1,0 +1,12 @@
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\bin\Debug\net9.0\Sketchfab.Infrastructure.deps.json
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\bin\Debug\net9.0\Sketchfab.Infrastructure.dll
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\bin\Debug\net9.0\Sketchfab.Infrastructure.pdb
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\Sketchfab.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\Sketchfab.Infrastructure.AssemblyInfoInputs.cache
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\Sketchfab.Infrastructure.AssemblyInfo.cs
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\Sketchfab.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\Sketchfab.Infrastructure.sourcelink.json
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\Sketchfab.Infrastructure.dll
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\refint\Sketchfab.Infrastructure.dll
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\Sketchfab.Infrastructure.pdb
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\ref\Sketchfab.Infrastructure.dll
