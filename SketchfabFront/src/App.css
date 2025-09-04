@@ -40,3 +40,12 @@
 .read-the-docs {
   color: #888;
 }
+.text {
+  color: #ec0707;
+  font-size: 20px;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}

@@ -10,3 +10,9 @@ C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\Sketchfab.I
 C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\refint\Sketchfab.Infrastructure.dll
 C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\Sketchfab.Infrastructure.pdb
 C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\ref\Sketchfab.Infrastructure.dll
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\bin\Debug\net9.0\Sketchfab.Application.dll
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\bin\Debug\net9.0\Sketchfab.Core.dll
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\bin\Debug\net9.0\Sketchfab.Application.pdb
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\bin\Debug\net9.0\Sketchfab.Core.pdb
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\Sketchfab.Infrastructure.csproj.AssemblyReference.cache
+C:\Diplom\SketchfabBackend\Sketchfab.Infrastructure\obj\Debug\net9.0\Sketchfa.1B0B59A3.Up2Date

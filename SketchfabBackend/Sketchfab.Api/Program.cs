@@ -1,3 +1,5 @@
+using Sketchfab.Infrastructure;
+
 
 namespace Sketchfab.Api
 {
@@ -6,8 +8,9 @@ namespace Sketchfab.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            var services = builder.Services;
             // Add services to the container.
+            services.AddCustomService();
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

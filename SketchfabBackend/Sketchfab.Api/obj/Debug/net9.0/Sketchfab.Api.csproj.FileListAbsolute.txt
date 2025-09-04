@@ -32,3 +32,9 @@ C:\Diplom\SketchfabBackend\Sketchfab.Api\bin\Debug\net9.0\Sketchfab.Api.runtimec
 C:\Diplom\SketchfabBackend\Sketchfab.Api\bin\Debug\net9.0\Sketchfab.Api.pdb
 C:\Diplom\SketchfabBackend\Sketchfab.Api\obj\Debug\net9.0\Sketchfab.Api.genruntimeconfig.cache
 C:\Diplom\SketchfabBackend\Sketchfab.Api\obj\Debug\net9.0\ref\Sketchfab.Api.dll
+C:\Diplom\SketchfabBackend\Sketchfab.Api\bin\Debug\net9.0\Sketchfab.Application.dll
+C:\Diplom\SketchfabBackend\Sketchfab.Api\bin\Debug\net9.0\Sketchfab.Core.dll
+C:\Diplom\SketchfabBackend\Sketchfab.Api\bin\Debug\net9.0\Sketchfab.Infrastructure.dll
+C:\Diplom\SketchfabBackend\Sketchfab.Api\bin\Debug\net9.0\Sketchfab.Application.pdb
+C:\Diplom\SketchfabBackend\Sketchfab.Api\bin\Debug\net9.0\Sketchfab.Infrastructure.pdb
+C:\Diplom\SketchfabBackend\Sketchfab.Api\bin\Debug\net9.0\Sketchfab.Core.pdb

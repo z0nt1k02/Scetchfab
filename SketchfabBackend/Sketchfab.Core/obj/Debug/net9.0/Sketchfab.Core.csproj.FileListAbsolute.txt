@@ -1,0 +1,12 @@
+C:\Diplom\SketchfabBackend\Sketchfab.Core\bin\Debug\net9.0\Sketchfab.Core.deps.json
+C:\Diplom\SketchfabBackend\Sketchfab.Core\bin\Debug\net9.0\Sketchfab.Core.dll
+C:\Diplom\SketchfabBackend\Sketchfab.Core\bin\Debug\net9.0\Sketchfab.Core.pdb
+C:\Diplom\SketchfabBackend\Sketchfab.Core\obj\Debug\net9.0\Sketchfab.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Diplom\SketchfabBackend\Sketchfab.Core\obj\Debug\net9.0\Sketchfab.Core.AssemblyInfoInputs.cache
+C:\Diplom\SketchfabBackend\Sketchfab.Core\obj\Debug\net9.0\Sketchfab.Core.AssemblyInfo.cs
+C:\Diplom\SketchfabBackend\Sketchfab.Core\obj\Debug\net9.0\Sketchfab.Core.csproj.CoreCompileInputs.cache
+C:\Diplom\SketchfabBackend\Sketchfab.Core\obj\Debug\net9.0\Sketchfab.Core.sourcelink.json
+C:\Diplom\SketchfabBackend\Sketchfab.Core\obj\Debug\net9.0\Sketchfab.Core.dll
+C:\Diplom\SketchfabBackend\Sketchfab.Core\obj\Debug\net9.0\refint\Sketchfab.Core.dll
+C:\Diplom\SketchfabBackend\Sketchfab.Core\obj\Debug\net9.0\Sketchfab.Core.pdb
+C:\Diplom\SketchfabBackend\Sketchfab.Core\obj\Debug\net9.0\ref\Sketchfab.Core.dll
