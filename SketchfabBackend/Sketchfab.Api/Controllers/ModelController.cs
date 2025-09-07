@@ -19,17 +19,16 @@ namespace Sketchfab.Api.Controllers
         }
 
         [HttpGet]
-        [Route("getmodel/{fileName}")]
-        public async Task<IActionResult> GetModel(string fileName)
+        [Route("getmodel/{id}")]
+        public async Task<IActionResult> GetModel(Guid id)
         {
             try
             {
-                var (fileStream, filename, mimeType) = await _modelService.GetModel(fileName);
-
+                var (fileStream, filename, mimeType) = await _modelService.GetModel(id);
                 return File(fileStream, mimeType, filename);
                
             }
-            catch (FileNotFoundException ex)
+            catch (NullReferenceException ex)
             {
                 return NotFound($"Файл с таким названием не найден: " + ex.Message);
             }
@@ -41,38 +40,44 @@ namespace Sketchfab.Api.Controllers
 
         [HttpPost]
         [Route("postModel")]
-        public async Task<IActionResult> PostModel([FromForm]IFormFile file)
+        public async Task<IActionResult> PostModel([FromForm]IFormFile model, [FromForm] IFormFile modelImage)
         {
-            const long maxFileSize = 20 * 1024 * 1024;
+            const long maxModelSize = 20 * 1024 * 1024;
             try
             {
-                if (file.Length > maxFileSize)
+                if (model.Length > maxModelSize)
                 {
                     return BadRequest("Файл слишком большой");
                 }
-                if (file.Length == 0 || file == null)
+                if (model.Length == 0 || model == null)
                 {
                     return BadRequest("Файл не должен быть пустым");
                 }
                 
-                var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+                var extension = Path.GetExtension(model.FileName).ToLowerInvariant();
                 if (extension != ".fbx")
                 {
                     return BadRequest("Только fbx файлы");                   
                 }
-                using (Stream stream = file.OpenReadStream())
-                {
-                    await _modelService.PostModel(stream, file.FileName);
-                }
+                await _modelService.PostModel(model, model.Name, modelImage);
 
                 return Ok("Файл успешно загружен");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"{ex.Message+ ex.StackTrace}");
             }
 
 
+        }
+
+        private bool CheckFile(long maxSize,IFormFile file)
+        {
+            if (file.Length > maxSize)
+                return false;
+            if (file.Length == 0 || file is null)
+                return false;
+            return true;
         }
 
         

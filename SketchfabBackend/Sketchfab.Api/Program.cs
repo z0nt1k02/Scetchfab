@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Sketchfab.Application.Interfaces;
 using Sketchfab.Infrastructure;
-
+using Sketchfab.Infrastructure.Database;
 
 namespace Sketchfab.Api
 {
@@ -9,6 +11,11 @@ namespace Sketchfab.Api
         {
             var builder = WebApplication.CreateBuilder(args);
             var services = builder.Services;
+
+            services.AddDbContext<ISketchfabDbContext, SketchfabDbContext>(options =>
+            {
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
             // Add services to the container.
             services.AddCustomService();
 

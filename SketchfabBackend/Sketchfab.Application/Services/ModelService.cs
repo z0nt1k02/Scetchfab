@@ -5,47 +5,89 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Sketchfab.Core.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace Sketchfab.Application.Services
 {
     public class ModelService : IModelService
     {
-        public async Task<(Stream, string, string)> GetModel(string fileName)
+        private readonly IConfiguration _configuration;
+        private readonly ISketchfabDbContext _context;
+        public ModelService(IConfiguration configuration, ISketchfabDbContext context   )
         {
-
-            string filePath = $"C:\\Diplom\\SketchfabBackend\\Sketchfab.Api\\StaticModels\\{fileName}";
-            
-            
-            if (! File.Exists(filePath))
+            _configuration = configuration;
+            _context = context;
+        }
+        public async Task<(Stream, string, string)> GetModel(Guid id)
+        {
+            try
             {
-                throw new FileNotFoundException("Файл с таким именем не найден");
+                var model = await _context.Models.FindAsync(id);
+                if(model is null)
+                {
+                    throw new NullReferenceException("Файл с таким id не найден");
+                }
+                var fileStream = new FileStream(
+                    model.ModelPath,
+                    FileMode.Open,
+                    FileAccess.Read,
+                    FileShare.Read,
+                    bufferSize: 65536, 
+                    useAsync: true);
+
+                string mimeType = GetMimeType(model.ModelPath);
+
+                //return Task.FromResult<(Stream, string, string)>((fileStream,model.Name, mimeType));
+                return (fileStream, model.Name, mimeType);
+            }catch(FileNotFoundException)
+            {
+                throw new FileNotFoundException($"Файл с таким именем не найден");
             }
-
-            var mimeType = GetMimeType(filePath);
-            
-            
-            var fileStream = new FileStream(
-                filePath,
-                FileMode.Open,
-                FileAccess.Read,
-                FileShare.Read,
-                bufferSize: 65536, 
-                useAsync: true);
-
-            return (fileStream, fileName, mimeType);
+                       
         }
 
-        public async Task PostModel(Stream file, string fileName)
+        public async Task PostModel(IFormFile model, string fileName,IFormFile modelImage)
         {            
-            string filePath = $"C:\\Diplom\\SketchfabBackend\\Sketchfab.Api\\StaticModels\\{fileName}";
+            Guid id = Guid.NewGuid();
+            Console.WriteLine(_configuration["FilesPaths:ModelsPath"]);
+            string modelPath;
+            string modelImagePath;
+            var paths = _configuration.GetSection("FilesPaths");
+
+            using Stream stream = model.OpenReadStream();          
+            modelPath = await SaveFile(stream, paths["ModelsPath"]!, $"{id.ToString()}.fbx");
+
+            using Stream streamImage = modelImage.OpenReadStream();           
+            modelImagePath = await SaveFile(streamImage, _configuration["FilesPaths:ModelsImagesPath"]!, $"{id.ToString()}.png");
+            
+            
+                      
+            var modelEntity = new ModelEntity
+            {
+               Id = id,
+               ModelPath = modelPath,
+               ModelImagePath = modelImagePath,
+               Name = fileName
+            };
+
+            _context.Models.Add(modelEntity);
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task<string> SaveFile(Stream file,string folderPath,string fileName)
+        {
+            string filePath = Path.Combine(folderPath, fileName);
+            
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
-            }            
+            }
+            return filePath;
         }
-
         
-
+       
         private string GetMimeType(string fileName)
         {
             var extension = Path.GetExtension(fileName).ToLowerInvariant();
