@@ -59,7 +59,7 @@ namespace Sketchfab.Api.Controllers
                 {
                     return BadRequest("Только fbx файлы");                   
                 }
-                await _modelService.PostModel(model, model.Name, modelImage);
+                await _modelService.PostModel(model, model.FileName, modelImage);
 
                 return Ok("Файл успешно загружен");
             }

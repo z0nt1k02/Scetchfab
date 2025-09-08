@@ -1,10 +1,4 @@
 ﻿using Sketchfab.Application.Interfaces;
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Sketchfab.Core.Entities;
 using Microsoft.AspNetCore.Http;
@@ -39,7 +33,7 @@ namespace Sketchfab.Application.Services
 
                 string mimeType = GetMimeType(model.ModelPath);
 
-                //return Task.FromResult<(Stream, string, string)>((fileStream,model.Name, mimeType));
+                
                 return (fileStream, model.Name, mimeType);
             }catch(FileNotFoundException)
             {
@@ -51,19 +45,16 @@ namespace Sketchfab.Application.Services
         public async Task PostModel(IFormFile model, string fileName,IFormFile modelImage)
         {            
             Guid id = Guid.NewGuid();
-            Console.WriteLine(_configuration["FilesPaths:ModelsPath"]);
             string modelPath;
             string modelImagePath;
             var paths = _configuration.GetSection("FilesPaths");
 
             using Stream stream = model.OpenReadStream();          
-            modelPath = await SaveFile(stream, paths["ModelsPath"]!, $"{id.ToString()}.fbx");
+            modelPath = await SaveFile(stream, paths["ModelsPath"]!, $"{id.ToString()}.{Path.GetExtension(fileName).ToLowerInvariant()}");
 
             using Stream streamImage = modelImage.OpenReadStream();           
-            modelImagePath = await SaveFile(streamImage, _configuration["FilesPaths:ModelsImagesPath"]!, $"{id.ToString()}.png");
-            
-            
-                      
+            modelImagePath = await SaveFile(streamImage, paths["ModelsImagesPath"]!, $"{id.ToString()}.{Path.GetExtension(modelImage.FileName).ToLowerInvariant()}");
+                                  
             var modelEntity = new ModelEntity
             {
                Id = id,
