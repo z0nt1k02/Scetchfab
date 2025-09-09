@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sketchfab.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/model")]
     [ApiController]
     public class ModelController : ControllerBase
     {
@@ -19,7 +19,7 @@ namespace Sketchfab.Api.Controllers
         }
 
         [HttpGet]
-        [Route("getmodel/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> GetModel(Guid id)
         {
             try
@@ -39,7 +39,6 @@ namespace Sketchfab.Api.Controllers
         }
 
         [HttpPost]
-        [Route("postModel")]
         public async Task<IActionResult> PostModel([FromForm]IFormFile model, [FromForm] IFormFile modelImage)
         {
             const long maxModelSize = 20 * 1024 * 1024;
@@ -70,6 +69,14 @@ namespace Sketchfab.Api.Controllers
 
 
         }
+
+        //[HttpGet]
+        //[Route("models")]
+        //public async Task <IActionResult> GetModelImage()
+        //{
+            
+        //    //return PhysicalFile();
+        //}
 
         private bool CheckFile(long maxSize,IFormFile file)
         {
