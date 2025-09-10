@@ -23,18 +23,20 @@ namespace Sketchfab.Application.Services
                 {
                     throw new NullReferenceException("Файл с таким id не найден");
                 }
+                string extension = Path.GetExtension(model.ModelName).ToLowerInvariant();
+                string path = Path.Combine(_configuration["FilesPaths:ModelsPath"]!, $"{model.Id}{extension}");
                 var fileStream = new FileStream(
-                    model.ModelPath,
+                    path,
                     FileMode.Open,
                     FileAccess.Read,
                     FileShare.Read,
                     bufferSize: 65536, 
                     useAsync: true);
 
-                string mimeType = GetMimeType(model.ModelPath);
+                string mimeType = GetMimeType(model.ModelName);
 
                 
-                return (fileStream, model.Name, mimeType);
+                return (fileStream, model.ModelName, mimeType);
             }catch(FileNotFoundException)
             {
                 throw new FileNotFoundException($"Файл с таким именем не найден");
@@ -42,7 +44,7 @@ namespace Sketchfab.Application.Services
                        
         }
 
-        public async Task PostModel(IFormFile model, string fileName,IFormFile modelImage)
+        public async Task PostModel(IFormFile model, IFormFile modelImage,string title)
         {            
             Guid id = Guid.NewGuid();
             string modelPath;
@@ -50,17 +52,17 @@ namespace Sketchfab.Application.Services
             var paths = _configuration.GetSection("FilesPaths");
 
             using Stream stream = model.OpenReadStream();          
-            modelPath = await SaveFile(stream, paths["ModelsPath"]!, $"{id.ToString()}.{Path.GetExtension(fileName).ToLowerInvariant()}");
+            modelPath = await SaveFile(stream, paths["ModelsPath"]!, $"{id.ToString()}{Path.GetExtension(model.FileName).ToLowerInvariant()}");
 
             using Stream streamImage = modelImage.OpenReadStream();           
-            modelImagePath = await SaveFile(streamImage, paths["ModelsImagesPath"]!, $"{id.ToString()}.{Path.GetExtension(modelImage.FileName).ToLowerInvariant()}");
+            modelImagePath = await SaveFile(streamImage, paths["ModelsImagesPath"]!, $"{id.ToString()}{Path.GetExtension(modelImage.FileName).ToLowerInvariant()}");
                                   
             var modelEntity = new ModelEntity
             {
                Id = id,
-               ModelPath = modelPath,
-               ModelImagePath = modelImagePath,
-               Name = fileName
+               ModelName = model.FileName,
+               ImageName = modelImage.FileName,   
+               Title = title
             };
 
             _context.Models.Add(modelEntity);

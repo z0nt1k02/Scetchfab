@@ -39,7 +39,7 @@ namespace Sketchfab.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostModel([FromForm]IFormFile model, [FromForm] IFormFile modelImage)
+        public async Task<IActionResult> PostModel([FromForm]IFormFile model, [FromForm] IFormFile modelImage,[FromForm]string title)
         {
             const long maxModelSize = 20 * 1024 * 1024;
             try
@@ -58,7 +58,7 @@ namespace Sketchfab.Api.Controllers
                 {
                     return BadRequest("Только fbx файлы");                   
                 }
-                await _modelService.PostModel(model, model.FileName, modelImage);
+                await _modelService.PostModel(model, modelImage,title);
 
                 return Ok("Файл успешно загружен");
             }

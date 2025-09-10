@@ -9,8 +9,16 @@ namespace Sketchfab.Api
     {
         public static void Main(string[] args)
         {
+            var frontCorsName = "front";
             var builder = WebApplication.CreateBuilder(args);
             var services = builder.Services;
+            services.AddCors(options =>
+            {
+                options.AddPolicy(frontCorsName, policy =>
+                {
+                    policy.WithOrigins(" http://localhost:5173");
+                });
+            });
 
             services.AddDbContext<ISketchfabDbContext, SketchfabDbContext>(options =>
             {
@@ -32,10 +40,11 @@ namespace Sketchfab.Api
             }
 
             app.UseHttpsRedirection();
+            app.UseCors(frontCorsName);
 
             app.UseAuthorization();
 
-
+            
             app.MapControllers();
 
             app.Run();
