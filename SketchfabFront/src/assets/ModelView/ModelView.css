@@ -1,0 +1,12 @@
+.modelView-container {
+  width: 75%;
+  height: 800px;
+  margin-top: 20px;
+  /* background-color: #656a94;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; */
+}
+.modelCanvas {
+  background-color: #c2b1b1;
+}

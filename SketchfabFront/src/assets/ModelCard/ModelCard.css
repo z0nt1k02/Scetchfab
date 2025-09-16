@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
 .modelCard-container {
   width: 500px;
   height: 300px;
@@ -10,9 +12,11 @@
   min-width: 100%;
 }
 .modelCard-title {
-  font-size: 1rem;
+  font-size: 20px;
+  color: #5c5952;
   font-weight: 600;
-  color: #3d3737;
+
   padding-left: 1em;
-  font-family: "Roboto", sans-serif;
+  font-family: "Montserrat", sans-serif;
+  font-weight: bold;
 }

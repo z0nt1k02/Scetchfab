@@ -59,6 +59,10 @@ h1 {
   gap: 20px;
   color: #5c5952;
 }
+.upload-button:hover {
+  background-color: aqua;
+}
+
 .upload-text {
   font-family: "Montserrat", sans-serif;
   font-style: italic;
