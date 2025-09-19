@@ -5,15 +5,17 @@ import Header from "../Header/Header.jsx";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Suspense } from "react";
+import { useParams } from "react-router-dom";
 
 export default function ModelView() {
   const [model, setModel] = useState(null);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const { id } = useParams();
   useEffect(() => {
     async function getModel() {
-      const id = "b94d418c-9043-4b6f-bf52-9a57c40b6ad2";
+      // const id = "b94d418c-9043-4b6f-bf52-9a57c40b6ad2";
       setLoading(true);
 
       try {
@@ -49,28 +51,28 @@ export default function ModelView() {
 
   function FBXModel() {
     const fbx = useFBX(model);
-    fbx.traverse((child) => {
-      if (child.isMesh) {
-        // Включаем тени
-        child.castShadow = true;
-        child.receiveShadow = true;
+    // fbx.traverse((child) => {
+    //   if (child.isMesh) {
+    //     // Включаем тени
+    //     child.castShadow = true;
+    //     child.receiveShadow = true;
 
-        // Если у меша есть материал, но он не отображается
-        if (child.material) {
-          // Настраиваем материал
-          child.material.metalness = 0;
-          child.material.roughness = 0.8;
-          child.material.needsUpdate = true;
-        } else {
-          // Создаем материал если его нет
-          child.material = new THREE.MeshStandardMaterial({
-            color: 0x888888,
-            metalness: 0,
-            roughness: 0.8,
-          });
-        }
-      }
-    });
+    //     // Если у меша есть материал, но он не отображается
+    //     if (child.material) {
+    //       // Настраиваем материал
+    //       child.material.metalness = 0;
+    //       child.material.roughness = 0.8;
+    //       child.material.needsUpdate = true;
+    //     } else {
+    //       // Создаем материал если его нет
+    //       child.material = new THREE.MeshStandardMaterial({
+    //         color: 0x888888,
+    //         metalness: 0,
+    //         roughness: 0.8,
+    //       });
+    //     }
+    //   }
+    // });
     return <primitive object={fbx} scale={0.01} />; // Adjust scale as needed
   }
   return (

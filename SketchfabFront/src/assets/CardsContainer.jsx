@@ -37,6 +37,7 @@ export default function CardsContainer() {
               src={item.url}
               alt={item.name}
               title={item.title}
+              modelId={item.id}
             />
           );
         })}

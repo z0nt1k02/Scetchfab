@@ -30,6 +30,18 @@ h1 {
   font-style: italic;
   font-size: 48px;
 }
+.h1-button {
+  color: #5c5952;
+  font-family: "Open Sans";
+  font-style: italic;
+  font-size: 48px;
+  font-weight: 700;
+  background-color: transparent;
+  border: none;
+}
+.h1-button:hover {
+  cursor: pointer;
+}
 .input-container {
   display: flex;
   justify-content: flex-start;
@@ -61,6 +73,7 @@ h1 {
 }
 .upload-button:hover {
   background-color: aqua;
+  cursor: pointer;
 }
 
 .upload-text {

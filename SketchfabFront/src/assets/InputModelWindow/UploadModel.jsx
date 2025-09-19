@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./InputModel.css";
+import { useNavigate } from "react-router-dom";
 
-export default function InputModel({ open, onClose }) {
+export default function UploadModel(/*{ open, onClose }*/) {
   const [modelFile, setModelFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [title, setTitle] = useState(""); // Инициализируем пустой строкой
+  const navigate = useNavigate();
+
+  const cancelButtonClick = () => {
+    navigate("/");
+  };
 
   if (!open) return null;
 
@@ -74,7 +80,7 @@ export default function InputModel({ open, onClose }) {
       <div className="inputModel-container">
         <form onSubmit={sendModel}>
           <label>
-            <button type="button" className="close-button" onClick={onClose}>
+            <button type="button" className="close-button">
               X
             </button>
           </label>
@@ -114,6 +120,13 @@ export default function InputModel({ open, onClose }) {
 
           <button type="submit" className="send-button">
             Отправить
+          </button>
+          <button
+            type="button"
+            className="send-button"
+            onClick={cancelButtonClick}
+          >
+            Отмена
           </button>
         </form>
       </div>
