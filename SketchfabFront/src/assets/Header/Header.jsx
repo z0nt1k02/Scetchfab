@@ -1,10 +1,13 @@
 import { useState } from "react";
 import "./Header.css";
+import Login from "../Login/Login";
+import Registration from "../Registraton/Registration";
 
 import { useNavigate } from "react-router-dom";
 
-function Header(/*{ isModal, setModal }*/) {
+function Header() {
   const [isModal, setModal] = useState(false);
+  const [isRegistrationModal, setRegistrationModal] = useState(false);
   function SetModal() {
     setModal(true);
   }
@@ -31,11 +34,18 @@ function Header(/*{ isModal, setModal }*/) {
         <img className="iconImage" src="/icon_search.png"></img>
         <input></input>
       </div>
+      <button onClick={() => setModal(true)}>Войти</button>
+      <button onClick={() => setRegistrationModal(true)}>Регистрация</button>
       <button className="upload-button" onClick={handleButtonClick}>
         <img className="upload-image" src="/upload.png" alt="" />
         Загрузить <br />
         модель
       </button>
+      <Login isOpen={isModal} onClose={() => setModal(false)} />
+      <Registration
+        isOpen={isRegistrationModal}
+        onClose={() => setRegistrationModal(false)}
+      />
     </header>
   );
 }

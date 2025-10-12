@@ -13,27 +13,32 @@ export default function ModelView() {
   const [error, setError] = useState("");
 
   const { id } = useParams();
+
+  const downloadButton = () => {
+    if (!model) return;
+
+    const link = document.createElement("a");
+    link.href = model;
+    let name = model.name;
+    link.setAttribute("download", "model.fbx");
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
   useEffect(() => {
     async function getModel() {
       // const id = "b94d418c-9043-4b6f-bf52-9a57c40b6ad2";
       setLoading(true);
-
       try {
         const response = await axios.get(
           `http://localhost:5105/api/model/${id}`,
           {
-            responseType: "blob", // Важно: указываем что ожидаем blob
+            responseType: "blob",
           }
         );
-
-        // Получаем название файла из заголовков
         const contentDisposition = response.headers["content-disposition"];
         let filename = "unknown-file";
-
-        // Создаем URL для blob
         const blobUrl = URL.createObjectURL(response.data);
-
-        // Сохраняем URL модели для использования в Three.js
         setModel(blobUrl);
       } catch (error) {
         console.error("Ошибка при получении файла:", error);
@@ -51,28 +56,6 @@ export default function ModelView() {
 
   function FBXModel() {
     const fbx = useFBX(model);
-    // fbx.traverse((child) => {
-    //   if (child.isMesh) {
-    //     // Включаем тени
-    //     child.castShadow = true;
-    //     child.receiveShadow = true;
-
-    //     // Если у меша есть материал, но он не отображается
-    //     if (child.material) {
-    //       // Настраиваем материал
-    //       child.material.metalness = 0;
-    //       child.material.roughness = 0.8;
-    //       child.material.needsUpdate = true;
-    //     } else {
-    //       // Создаем материал если его нет
-    //       child.material = new THREE.MeshStandardMaterial({
-    //         color: 0x888888,
-    //         metalness: 0,
-    //         roughness: 0.8,
-    //       });
-    //     }
-    //   }
-    // });
     return <primitive object={fbx} scale={0.01} />; // Adjust scale as needed
   }
   return (
@@ -84,18 +67,14 @@ export default function ModelView() {
             <ambientLight intensity={0.5} />
             <directionalLight position={[0, 0, 0]} intensity={1} />
             <OrbitControls />
-            {/* <mesh>
-            <boxGeometry args={[1, 1, 1]} />
-            <meshStandardMaterial color="hotpink" />
-            <model url="api/model/ed4094d6-f5c4-4df1-974f-15cefa531661" />
-
-            <Environment preset="sunset"></Environment>
-          </mesh> */}
             <Suspense>
               <FBXModel />
             </Suspense>
           </Canvas>
         </div>
+        <button className="download-button" onClick={downloadButton}>
+          Скачать
+        </button>
       </div>
     </>
   );

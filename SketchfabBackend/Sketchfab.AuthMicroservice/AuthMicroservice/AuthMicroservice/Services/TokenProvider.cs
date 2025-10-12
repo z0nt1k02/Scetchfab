@@ -33,7 +33,7 @@ namespace AuthMicroservice.Services
                 Subject = new ClaimsIdentity(
                 [
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, user.Role.ToString()),
+                    new Claim(ClaimTypes.Name,user.Nickname),
             ]),
 
                 Expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtOptions["TokenValidityMins"])),

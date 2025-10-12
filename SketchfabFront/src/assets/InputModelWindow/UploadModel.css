@@ -1,0 +1,118 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+.inputModel-container {
+  width: 1200px;
+  height: 600px;
+  margin: auto;
+  margin-top: 40px;
+  background-color: #cfe8d8;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 40px;
+}
+h1 {
+  text-align: center;
+}
+
+.upload-form {
+  width: 900px;
+  display: grid;
+  grid-auto-rows: min-content;
+  row-gap: 28px;
+  justify-content: center;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 220px 300px 1fr;
+  align-items: center;
+  column-gap: 28px;
+}
+
+.form-label {
+  font-family: "Montserrat", sans-serif;
+  font-size: 22px;
+  color: #3d4a3f;
+}
+
+.file-upload {
+  position: relative;
+  display: inline-block;
+  width: 300px;
+  height: 90px;
+}
+
+.file-upload input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.file-upload:hover{
+  cursor: pointer;
+  background-color: black;
+}
+.file-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.08);
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  color: #3d4a3f;
+}
+
+
+.file-status {
+  font-family: "Montserrat", sans-serif;
+  font-size: 22px;
+  color: #6b6f6b;
+}
+
+.title-row {
+  display: flex;
+  justify-content: center;
+}
+
+.title-input {
+  width: 720px;
+  height: 64px;
+  padding: 0 20px;
+  border-radius: 8px;
+  border: 1px solid #a8b8ad;
+  background: #fff;
+  font-family: "Montserrat", sans-serif;
+  font-size: 24px;
+  color: #3d4a3f;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.send-button {
+  height: 48px;
+  background-color: #7ee1e1;
+  border: none;
+  border-radius: 8px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 18px;
+  color: #1a3330;
+  cursor: pointer;
+}
+
+.send-button:hover {
+  background-color: rgb(82, 224, 224);
+}
+
+.send-button.cancel {
+  background-color: #e1b7b7;
+}

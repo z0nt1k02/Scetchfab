@@ -16,9 +16,10 @@ namespace Sketchfab.Api
             {
                 options.AddPolicy(frontCorsName, policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173");
+                    policy.WithOrigins("http://localhost:5173").AllowAnyMethod().AllowAnyHeader();
                 });
             });
+            services.AddHttpClient();
 
             services.AddDbContext<ISketchfabDbContext, SketchfabDbContext>(options =>
             {

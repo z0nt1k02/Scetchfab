@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sketchfab.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0f7f2f7bbfe953556ace1647121565b8369de037")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c6ac71cccf58a036de7d6dc66b398d5d92f346de")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sketchfab.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sketchfab.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

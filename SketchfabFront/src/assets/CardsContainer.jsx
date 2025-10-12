@@ -10,7 +10,6 @@ export default function CardsContainer() {
     async function getItems() {
       try {
         setLoading(true);
-        // const response = await fetch("/api/model/preview-images");
         const response = await axios.get("/api/model/preview-images");
         const images = await response.data;
         setItems(images);

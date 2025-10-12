@@ -12,7 +12,7 @@ namespace AuthMicroservice.Services
 
         public bool VerifyHash(string password, string hashedPassword)
         {
-            return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
+            return BCrypt.Net.BCrypt.EnhancedVerify(password, hashedPassword);
         }
     }
 }

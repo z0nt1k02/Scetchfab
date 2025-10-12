@@ -36,6 +36,10 @@ namespace AuthMicroservice.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Nickname")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 

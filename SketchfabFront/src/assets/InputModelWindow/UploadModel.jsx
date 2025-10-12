@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./InputModel.css";
+import "./UploadModel.css";
 import { useNavigate } from "react-router-dom";
 
-export default function UploadModel(/*{ open, onClose }*/) {
+export default function UploadModel() {
   const [modelFile, setModelFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [title, setTitle] = useState(""); // Инициализируем пустой строкой
@@ -13,13 +13,20 @@ export default function UploadModel(/*{ open, onClose }*/) {
     navigate("/");
   };
 
-  if (!open) return null;
-
   function getFileExtension(filename) {
     const match = /\.([a-zA-Z0-9]+)$/.exec(filename);
     return match ? match[1] : "";
   }
-
+  async function uploadModel(file, url) {
+    // console.log(url);
+    // console.log(file.name);
+    const ude = url;
+    await axios.put(ude, file, {
+      headers: {
+        "Content-Type": "application/octet-stream",
+      },
+    });
+  }
   async function sendModel(e) {
     e.preventDefault();
 
@@ -40,24 +47,28 @@ export default function UploadModel(/*{ open, onClose }*/) {
     }
 
     try {
-      const formData = new FormData();
-      formData.append("model", modelFile);
-      formData.append("modelImage", imageFile);
-      formData.append("title", title);
+      const dto = {
+        title: title,
+        modelName: modelFile.name,
+      };
 
-      const response = await axios.post("/api/model", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:5105/api/model",
+        dto,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       console.log(response.data);
-      onClose();
 
       // Очищаем форму
-      setModelFile(null);
-      setImageFile(null);
-      setTitle("");
+      // setModelFile(null);
+      // setImageFile(null);
+      // setTitle("");
+      await uploadModel(modelFile, response.data);
     } catch (error) {
       console.error("Ошибка при отправке:", error);
     }
@@ -76,60 +87,75 @@ export default function UploadModel(/*{ open, onClose }*/) {
   };
 
   return (
-    <div className="inputModel-visible">
+    <>
+      <h1>Загрузить модель</h1>
       <div className="inputModel-container">
-        <form onSubmit={sendModel}>
-          <label>
-            <button type="button" className="close-button">
-              X
-            </button>
-          </label>
+        <form onSubmit={sendModel} className="upload-form">
+          <div className="form-row">
+            <div className="form-label">
+              <span>Модель (.fbx)</span>
+            </div>
+            <label className="file-upload">
+              <input
+                type="file"
+                accept=".fbx"
+                onChange={handleModelChange}
+                required
+              />
+              <span className="file-button">Выберите файл</span>
+            </label>
+            <div className="file-status">
+              {modelFile ? `Выбран: ${modelFile.name}` : "Файл не выбран"}
+            </div>
+          </div>
 
-          <label>
-            Файл модели (.fbx):
-            <input
-              type="file"
-              accept=".fbx"
-              onChange={handleModelChange}
-              required
-            />
-            {modelFile && <span>Выбран: {modelFile.name}</span>}
-          </label>
+          <div className="form-row">
+            <div className="form-label">
+              <span>
+                Изображение
+                <br />
+                (.png, .jpeg)
+              </span>
+            </div>
+            <label className="file-upload">
+              <input
+                type="file"
+                accept=".png,.jpeg,.jpg"
+                onChange={handleImageChange}
+                required
+              />
+              <span className="file-button">Выберите файл</span>
+            </label>
+            <div className="file-status">
+              {imageFile ? `Выбран: ${imageFile.name}` : "Файл не выбран"}
+            </div>
+          </div>
 
-          <label>
-            Изображение (.png, .jpeg):
-            <input
-              type="file"
-              accept=".png,.jpeg,.jpg"
-              onChange={handleImageChange}
-              required
-            />
-            {imageFile && <span>Выбран: {imageFile.name}</span>}
-          </label>
-
-          <label>
-            Название модели:
+          <div className="title-row">
             <input
               type="text"
-              value={title} // Теперь это контролируемый input
+              value={title}
               onChange={handleTitleChange}
-              placeholder="Введите название"
+              placeholder="Введите название модели"
               required
+              className="title-input"
             />
-          </label>
+          </div>
 
-          <button type="submit" className="send-button">
-            Отправить
-          </button>
-          <button
-            type="button"
-            className="send-button"
-            onClick={cancelButtonClick}
-          >
-            Отмена
-          </button>
+          <div className="actions">
+            <button type="submit" className="send-button">
+              Отправить
+            </button>
+            <button
+              type="button"
+              className="send-button cancel"
+              onClick={cancelButtonClick}
+            >
+              Отмена
+            </button>
+          </div>
         </form>
       </div>
-    </div>
+    </>
   );
 }

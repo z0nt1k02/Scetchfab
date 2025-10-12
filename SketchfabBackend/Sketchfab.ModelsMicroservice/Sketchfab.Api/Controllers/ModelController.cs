@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Sketchfab.Application.Dtos;
 using Sketchfab.Application.Interfaces;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 
@@ -17,20 +21,20 @@ namespace Sketchfab.Api.Controllers
         {
             _modelService = modelService;
         }
-
+        [HttpGet]
+        public async Task<IActionResult> GetModels([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var res = await _modelService.GetModels(page, pageSize);
+            return Ok(res);
+        }
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetModel(Guid id)
         {
             try
             {
-                var (fileStream, filename, mimeType) = await _modelService.GetModel(id);
-                return File(fileStream, mimeType, filename);
-
-            }
-            catch (NullReferenceException ex)
-            {
-                return NotFound($"Файл с таким названием не найден: " + ex.Message);
+                var res = await _modelService.DownloadModel(id);
+                return Ok(res);
             }
             catch (Exception ex)
             {
@@ -39,40 +43,24 @@ namespace Sketchfab.Api.Controllers
         }
 
         [HttpPost]
-        [Route("postModel")]
-        public async Task<IActionResult> PostModel([FromForm]IFormFile file)
+        //[Authorize]
+        public async Task<IActionResult> PostModel(CreateModelDto dto)
         {
-            const long maxFileSize = 20 * 1024 * 1024;
             try
             {
-                if (file.Length > maxFileSize)
-                {
-                    return BadRequest("Файл слишком большой");
-                }
-                if (file.Length == 0 || file == null)
-                {
-                    return BadRequest("Файл не должен быть пустым");
-                }
-                
-                var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-                if (extension != ".fbx")
-                {
-                    return BadRequest("Только fbx файлы");                   
-                }
-                using (Stream stream = file.OpenReadStream())
-                {
-                    await _modelService.PostModel(stream, file.FileName);
-                }
-
-                return Ok("Файл успешно загружен");
+                //string creatorId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.ToString();
+                //string creatorName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)!.ToString();
+                string id = Guid.NewGuid().ToString();
+                string creatorName = "Igor";
+                var res = await _modelService.UploadModel(dto.title, dto.modelName, id,creatorName);
+                return Ok(res);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500,ex.Message);
             }
-
-
         }
+
 
         private string GetMimeType(string fileName)
         {

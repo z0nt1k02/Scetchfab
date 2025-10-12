@@ -28,7 +28,10 @@ namespace Sketchfab.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("ImageName")
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CreatorName")
                         .IsRequired()
                         .HasColumnType("text");
 

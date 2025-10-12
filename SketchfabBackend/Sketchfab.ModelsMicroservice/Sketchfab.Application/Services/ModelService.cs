@@ -2,6 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Sketchfab.Core.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Http;
+using System.Text.Json;
+using System.Net.Http.Json;
+using Sketchfab.Application.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace Sketchfab.Application.Services
 {
@@ -9,94 +14,62 @@ namespace Sketchfab.Application.Services
     {
         private readonly IConfiguration _configuration;
         private readonly ISketchfabDbContext _context;
-        public ModelService(IConfiguration configuration, ISketchfabDbContext context   )
+        private readonly IHttpClientFactory _httpClientFactory;
+        public ModelService(IConfiguration configuration, ISketchfabDbContext context,IHttpClientFactory httpClientFactory   )
         {
             _configuration = configuration;
             _context = context;
+            _httpClientFactory = httpClientFactory;
         }
-        public async Task<(Stream, string, string)> GetModel(Guid id)
+        public async Task<List<ShortModelDto>> GetModels(int page,int pageSize)
         {
-            try
-            {
-                var model = await _context.Models.FindAsync(id);
-                if(model is null)
-                {
-                    throw new NullReferenceException("Файл с таким id не найден");
-                }
-                string extension = Path.GetExtension(model.ModelName).ToLowerInvariant();
-                string path = Path.Combine(_configuration["FilesPaths:ModelsPath"]!, $"{model.Id}{extension}");
-                var fileStream = new FileStream(
-                    path,
-                    FileMode.Open,
-                    FileAccess.Read,
-                    FileShare.Read,
-                    bufferSize: 65536, 
-                    useAsync: true);
+            var models = await _context.Models
+                .OrderBy(m => m.Id)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            var result = models.Select(m => new ShortModelDto(m.Title, m.ModelName, m.CreatorName)).ToList();
+            return result;
 
-                string mimeType = GetMimeType(model.ModelName);
+        }
+        public async Task<ShortModelDto> DownloadModel(Guid id)
+        {
+            ModelEntity model = _context.Models.Find(id) ?? throw new NullReferenceException("Модель не найдена");
+            var client = _httpClientFactory.CreateClient();
+            JsonContent content = JsonContent.Create(new { fileName = model.ModelName });
 
-                
-                return (fileStream, model.ModelName, mimeType);
-            }catch(FileNotFoundException)
+            var response = await client.PostAsync("http://localhost:5019/api/downloadlink", content);
+            if (response.IsSuccessStatusCode)
             {
-                throw new FileNotFoundException($"Файл с таким именем не найден");
+                string downloadUrl = await response.Content.ReadAsStringAsync();
+                return new ShortModelDto(model.Title,downloadUrl,model.CreatorName);
             }
-                       
+            else
+            {
+                throw new Exception("Не удалось получить ссылку для загрузки");
+            }
         }
 
-        public async Task PostModel(IFormFile model, IFormFile modelImage,string title)
-        {            
+        public async Task<string> UploadModel(string title, string modelName, string creatorId,string creatorName)
+        {
             Guid id = Guid.NewGuid();
-            string modelPath;
-            string modelImagePath;
-            var paths = _configuration.GetSection("FilesPaths");
-
-            using Stream stream = model.OpenReadStream();          
-            modelPath = await SaveFile(stream, paths["ModelsPath"]!,
-                $"{id.ToString()}{Path.GetExtension(model.FileName).ToLowerInvariant()}");
-
-            using Stream streamImage = modelImage.OpenReadStream();           
-            modelImagePath = await SaveFile(streamImage, paths["ModelsImagesPath"]!,
-                $"{id.ToString()}{Path.GetExtension(modelImage.FileName).ToLowerInvariant()}");
-                                  
-            var modelEntity = new ModelEntity
-            {
-               Id = id,
-               ModelName = model.FileName,
-               ImageName = modelImage.FileName,   
-               Title = title
-            };
-
-            _context.Models.Add(modelEntity);
-            await _context.SaveChangesAsync();
-        }
-
-        private async Task<string> SaveFile(Stream file,string folderPath,string fileName)
-        {
-            string filePath = Path.Combine(folderPath, fileName);
+            ModelEntity entity = ModelEntity.Create(title, modelName, Guid.Parse(creatorId), creatorName);
+            var client = _httpClientFactory.CreateClient();
             
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            JsonContent content = JsonContent.Create(new { fileName = modelName });
+            
+            var response = await client.PostAsync("http://localhost:5019/api/uploadlink",content);
+            if (response.IsSuccessStatusCode)
             {
-                await file.CopyToAsync(stream);
+                string result = await response.Content.ReadAsStringAsync();
+                await _context.Models.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return result;
             }
-            return filePath;
-        }
-        
-       
-        private string GetMimeType(string fileName)
-        {
-            var extension = Path.GetExtension(fileName).ToLowerInvariant();
-
-            return extension switch
+            else
             {
-                ".glb" => "model/gltf-binary",
-                ".gltf" => "model/gltf+json",
-                ".fbx" => "application/octet-stream",
-                ".obj" => "model/obj",
-                ".stl" => "model/stl",
-                ".3ds" => "application/octet-stream",
-                _ => "application/octet-stream"
-            };
+                throw new Exception("Не удалось получить ссылку для загрузки");
+            }
         }
     }
 }

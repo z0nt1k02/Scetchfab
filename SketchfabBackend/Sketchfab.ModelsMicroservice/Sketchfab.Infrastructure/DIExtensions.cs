@@ -15,7 +15,6 @@ namespace Sketchfab.Infrastructure
         public static void AddCustomService(this IServiceCollection services)
         {
             services.AddScoped<IModelService, ModelService>();
-            services.AddScoped<IImageService, ImageService>();
         }
     }
 }

@@ -71,6 +71,7 @@ h1 {
   gap: 20px;
   color: #5c5952;
 }
+
 .upload-button:hover {
   background-color: aqua;
   cursor: pointer;
@@ -84,4 +85,75 @@ h1 {
   width: 40px;
   height: 40px;
   margin-left: 5px;
+}
+
+/* Login modal styles */
+.login-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.login-modal {
+  position: relative;
+  width: 420px;
+  max-width: 90vw;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-title {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  color: #5c5952;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-input {
+  height: 44px;
+  padding: 0 12px;
+  border: 2px solid #959595;
+  border-radius: 8px;
+  font-family: "Open Sans";
+  font-size: 16px;
+}
+
+.login-submit {
+  height: 48px;
+  background-color: #cfe8d8;
+  color: #5c5952;
+  border: 3px solid #959595;
+  border-radius: 10px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 18px;
+}
+
+.login-submit:hover {
+  background-color: aqua;
+  cursor: pointer;
+}
+
+.login-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #5c5952;
 }
