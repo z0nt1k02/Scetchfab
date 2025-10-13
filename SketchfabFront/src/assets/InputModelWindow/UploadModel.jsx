@@ -18,8 +18,6 @@ export default function UploadModel() {
     return match ? match[1] : "";
   }
   async function uploadModel(file, url) {
-    // console.log(url);
-    // console.log(file.name);
     const ude = url;
     await axios.put(ude, file, {
       headers: {
@@ -53,7 +51,7 @@ export default function UploadModel() {
       };
 
       const response = await axios.post(
-        "http://localhost:5105/api/model",
+        "http://localhost:5105/api/models",
         dto,
         {
           headers: {

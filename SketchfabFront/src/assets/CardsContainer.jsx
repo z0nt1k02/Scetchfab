@@ -5,14 +5,16 @@ import axios from "axios";
 
 export default function CardsContainer() {
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function getItems() {
       try {
         setLoading(true);
-        const response = await axios.get("/api/model/preview-images");
-        const images = await response.data;
-        setItems(images);
+        const response = await axios.get(
+          "http://localhost:5105/api/models?page=1&pageSize=10"
+        );
+        setItems(response.data);
+        console.log(response.data);
       } catch (error) {
         setLoading(false);
         return error;
@@ -33,8 +35,7 @@ export default function CardsContainer() {
           return (
             <ModelCard
               key={index}
-              src={item.url}
-              alt={item.name}
+              modelUrl={item.fileUrl}
               title={item.title}
               modelId={item.id}
             />
