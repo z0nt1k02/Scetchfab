@@ -279,3 +279,15 @@ C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\
 C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
 C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\Microsoft.Extensions.Http.dll
 C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll
+C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\NRedisStack.dll
+C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
+C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\StackExchange.Redis.dll
+C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
+C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
+C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll

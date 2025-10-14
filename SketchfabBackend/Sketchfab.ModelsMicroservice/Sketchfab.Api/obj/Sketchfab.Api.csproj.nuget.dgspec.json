@@ -58,6 +58,10 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[9.0.9, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.3, )"
@@ -77,6 +81,18 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.8, )"
+            },
+            "Microsoft.IdentityModel.JsonWebTokens": {
+              "target": "Package",
+              "version": "[8.14.0, )"
+            },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[8.14.0, )"
+            },
+            "NRedisStack": {
+              "target": "Package",
+              "version": "[1.1.1, )"
             },
             "Npgsql": {
               "target": "Package",
@@ -169,6 +185,10 @@
               "target": "Package",
               "version": "[5.0.17, )"
             },
+            "Microsoft.AspNetCore.Mvc.Core": {
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.8, )"
@@ -180,6 +200,10 @@
             "Microsoft.Extensions.Http": {
               "target": "Package",
               "version": "[9.0.9, )"
+            },
+            "NRedisStack": {
+              "target": "Package",
+              "version": "[1.1.1, )"
             },
             "RabbitMQ.Client": {
               "target": "Package",
@@ -336,6 +360,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.8, )"
+            },
+            "Microsoft.Extensions.Caching.StackExchangeRedis": {
+              "target": "Package",
+              "version": "[9.0.9, )"
             },
             "Microsoft.Extensions.DependencyInjection.Abstractions": {
               "target": "Package",

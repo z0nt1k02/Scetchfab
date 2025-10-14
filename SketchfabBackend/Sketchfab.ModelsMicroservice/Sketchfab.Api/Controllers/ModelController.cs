@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Sketchfab.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class ModelController : ControllerBase
     {
@@ -22,13 +22,15 @@ namespace Sketchfab.Api.Controllers
             _modelService = modelService;
         }
         [HttpGet]
+        [Route("models")]
+        [Authorize]
         public async Task<IActionResult> GetModels([FromQuery] int page, [FromQuery] int pageSize)
         {
             var res = await _modelService.GetModels(page, pageSize);
             return Ok(res);
         }
         [HttpGet]
-        [Route("{id}")]
+        [Route("models/{id}")]
         public async Task<IActionResult> GetModel(Guid id)
         {
             try
@@ -43,7 +45,8 @@ namespace Sketchfab.Api.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
+        [Route("models")]
+        [Authorize]
         public async Task<IActionResult> PostModel(CreateModelDto dto)
         {
             try

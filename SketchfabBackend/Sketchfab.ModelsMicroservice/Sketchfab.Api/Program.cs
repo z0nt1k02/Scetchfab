@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Sketchfab.Api.Authentication;
 using Sketchfab.Application.Interfaces;
 using Sketchfab.Infrastructure;
 using Sketchfab.Infrastructure.Database;
@@ -12,6 +13,7 @@ namespace Sketchfab.Api
             var frontCorsName = "front";
             var builder = WebApplication.CreateBuilder(args);
             var services = builder.Services;
+            var configuration = builder.Configuration;
             services.AddCors(options =>
             {
                 options.AddPolicy(frontCorsName, policy =>
@@ -20,7 +22,8 @@ namespace Sketchfab.Api
                 });
             });
             services.AddHttpClient();
-
+            services.AddRedisConnection();
+            services.AddApiAuthentication(configuration);
             services.AddDbContext<ISketchfabDbContext, SketchfabDbContext>(options =>
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));

@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Sketchfab.Application.Dtos
 {
-    public record class ShortModelDto(string title,string fileUrl,string creatorName);  
+    public record class ShortModelDto(string id,string title,string fileUrl,string creatorName);  
 }
