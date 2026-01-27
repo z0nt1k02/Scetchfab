@@ -23,7 +23,7 @@ namespace Sketchfab.Api.Controllers
         }
         [HttpGet]
         [Route("models")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetModels([FromQuery] int page, [FromQuery] int pageSize)
         {
             var res = await _modelService.GetModels(page, pageSize);
@@ -46,7 +46,7 @@ namespace Sketchfab.Api.Controllers
 
         [HttpPost]
         [Route("models")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> PostModel(CreateModelDto dto)
         {
             try

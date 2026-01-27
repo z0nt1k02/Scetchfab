@@ -22,7 +22,7 @@ namespace AuthMicroservice.Controllers
         {
             try
             {
-                await _authenticationService.Registration(registrationDto.login, registrationDto.password,registrationDto.nickname);
+                await _authenticationService.Registration(registrationDto.email, registrationDto.password,registrationDto.nickname);
                 
                 return Ok("Registration successful");
             }
@@ -38,7 +38,7 @@ namespace AuthMicroservice.Controllers
             HttpContext context = HttpContext;
             try
             {
-                var token = await _authenticationService.Login(loginDto.login, loginDto.password);
+                var token = await _authenticationService.Login(loginDto.email, loginDto.password);
                 context.Response.Cookies.Append("token", token);
                 return Ok("Login successful");
             }

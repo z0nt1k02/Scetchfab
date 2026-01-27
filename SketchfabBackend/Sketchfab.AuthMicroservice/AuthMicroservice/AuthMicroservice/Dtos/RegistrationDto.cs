@@ -3,19 +3,20 @@
 namespace AuthMicroservice.Dtos
 {
     public record RegistrationDto
-   ([Required(ErrorMessage = "Login is required")]
-    [MinLength(4, ErrorMessage = "Login must be at least 4 characters long")]
-    string login,
+   ([Required(ErrorMessage = "Почта обязателен")]
+    [StringLength(50,MinimumLength =4,ErrorMessage ="Длина строки от 3 до 50 символов")]
+    [EmailAddress]
+    string email,
 
 
-    [Required(ErrorMessage = "Password is required")]
-    [MinLength(5, ErrorMessage = "Password must be at least 5 characters long")]
+    [Required(ErrorMessage = "Пароль обязателен")]
+    [StringLength(50,MinimumLength =4,ErrorMessage ="Длина строки от 3 до 50 символов")]
     [RegularExpression(@"^(?=.*[!@#$%^&*]).+$",
-        ErrorMessage = "Password must contain a special character (!@#$%^&*)")]
+        ErrorMessage = "Пароль должен содеражать минимум 1 спец.символ (!@#$%^&*)")]
     string password,
 
-    [Required(ErrorMessage = "Nickname is required")]
-    [MinLength(5, ErrorMessage = "Nickname must be at least 5 characters long")]
+    [Required(ErrorMessage = "Никнейм обязателен")]
+    [StringLength(50,MinimumLength =4,ErrorMessage ="Длина строки от 3 до 50 символов")]
     string nickname);
 
 }

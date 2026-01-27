@@ -12,32 +12,41 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Sketchfab.Application.Services
 {
-    public class ModelService(IConfiguration configuration, ISketchfabDbContext context, IHttpClientFactory httpClientFactory, IDistributedCache cache) : IModelService
+    public class ModelService(IConfiguration configuration, ISketchfabDbContext context, IHttpClientFactory httpClientFactory, IDistributedCache cache,IYandexStorageService yandexStorageService) : IModelService
     {
         private readonly IConfiguration _configuration = configuration;
         private readonly ISketchfabDbContext _context = context;
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
         private readonly IDistributedCache _cache = cache;
+        private readonly IYandexStorageService _yandexStorageService = yandexStorageService;
 
         public async Task<List<ShortModelDto>> GetModels(int page,int pageSize)
         {
-            var models = _cache.GetAsync("models1page");
-            if(models.Result != null)
-            {
-                var cachedModels = JsonSerializer.Deserialize<List<ShortModelDto>>(models.Result);
-                if (cachedModels != null)
-                {
-                    return cachedModels;
-                }
-            }
+            //var models = await _cache.GetAsync("models1page");
+            //if(models != null)
+            //{
+            //    var cachedModels = JsonSerializer.Deserialize<List<ShortModelDto>>(models);
+            //    if (cachedModels != null)
+            //    {
+            //        return cachedModels;
+            //    }
+            //}
             var modelsDb = await _context.Models
                 .OrderBy(m => m.Id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
-            var result = modelsDb.Select(m => new ShortModelDto(m.Id.ToString(),m.Title, m.ModelName, m.CreatorName)).ToList();
-            //await _cache.SetAsync("models1page", result);
-            await CreateCache(result);
+            Console.WriteLine();
+            var links = await _yandexStorageService.GetDownloadLinksAsync(modelsDb.Select(m => m.ModelName).ToList());
+
+            //Console.WriteLine(links["Yaroslavl.fbx"]);
+
+            var result = modelsDb.Select(m =>
+            {
+                var modelLink = links.GetValueOrDefault(m.ModelName);
+                return new ShortModelDto(m.Id.ToString(), m.Title, modelLink!, "Игорь");
+            }).ToList();
+
             return result;
 
         }

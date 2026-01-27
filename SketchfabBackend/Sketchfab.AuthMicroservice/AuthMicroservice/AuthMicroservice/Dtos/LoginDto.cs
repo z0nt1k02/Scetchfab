@@ -2,10 +2,12 @@
 
 namespace AuthMicroservice.Dtos
 {
-    public record LoginDto([Required(ErrorMessage = "Login is required")]
-    string login,
+    public record LoginDto(
+        [Required(ErrorMessage = "Логин обязателен")]
+    string email,
 
-    [Required(ErrorMessage = "Password is required")]
+    [Required(ErrorMessage = "Пароль обязателен")]
+    [MinLength(6,ErrorMessage ="Минимальная длина пароля 6 символов")]
     string password);
     
 }

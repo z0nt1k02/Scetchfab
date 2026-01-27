@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Sketchfab.Application\Sketchfab.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dtos\" />
+  </ItemGroup>
+
 </Project>

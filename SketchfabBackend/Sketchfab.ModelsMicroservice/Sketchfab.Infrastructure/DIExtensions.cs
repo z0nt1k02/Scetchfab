@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Sketchfab.Application.Interfaces;
 using Sketchfab.Application.Services;
-
+using Sketchfab.Infrastructure.YandexS3Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +15,7 @@ namespace Sketchfab.Infrastructure
         public static void AddCustomService(this IServiceCollection services)
         {
             services.AddScoped<IModelService, ModelService>();
+            services.AddSingleton<IYandexStorageService, YandexStorageService>();
         }
     }
 }
