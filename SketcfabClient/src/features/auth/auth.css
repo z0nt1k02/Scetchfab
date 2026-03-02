@@ -1,0 +1,80 @@
+/* ===== Modal overlay ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* ===== Modal box ===== */
+.modal-content {
+  background-color: #16213e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 32px 28px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-content h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-content input {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.modal-content input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.modal-content input:focus {
+  border-color: #646cff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.modal-content button[type='submit'] {
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #646cff;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 4px;
+}
+
+.modal-content button[type='submit']:hover {
+  background-color: #535bf2;
+}
+
+.modal-error {
+  color: #f87171;
+  font-size: 0.85rem;
+}

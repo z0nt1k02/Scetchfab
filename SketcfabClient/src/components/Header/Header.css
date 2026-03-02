@@ -1,0 +1,175 @@
+/* ===== Header ===== */
+.header-container {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 0 24px;
+  height: 64px;
+  background-color: #1a1a2e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+}
+
+/* ===== Logo ===== */
+.logo-container h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #646cff, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ===== Search ===== */
+.search-container {
+  flex: 1;
+  max-width: 480px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s;
+  box-sizing: border-box;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.search-input:focus {
+  border-color: #646cff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== User controls ===== */
+.user-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.login-container button,
+.registration-container button {
+  padding: 8px 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.login-container button {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.login-container button:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.registration-container button {
+  background-color: #646cff;
+  border: 1px solid #646cff;
+  color: #fff;
+}
+
+.registration-container button:hover {
+  background-color: #535bf2;
+  border-color: #535bf2;
+}
+
+/* ===== Upload button ===== */
+.upload-container button {
+  padding: 8px 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+  background-color: rgba(100, 108, 255, 0.15);
+  border: 1px solid rgba(100, 108, 255, 0.4);
+  color: #a5b4fc;
+}
+
+.upload-container button:hover {
+  background-color: rgba(100, 108, 255, 0.25);
+  border-color: #646cff;
+  color: #fff;
+}
+
+/* ===== Responsive ===== */
+
+/* Tablet: hide register label, shorten buttons */
+@media (max-width: 768px) {
+  .header-container {
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  .registration-container button {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+
+  .login-container button {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Mobile: collapse search, stack buttons icon-style */
+@media (max-width: 540px) {
+  .header-container {
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .search-container {
+    max-width: none;
+  }
+
+  .registration-container span {
+    display: none;
+  }
+
+  .login-container button,
+  .registration-container button {
+    padding: 7px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Very small screens: hide register button entirely */
+@media (max-width: 380px) {
+  .registration-container {
+    display: none;
+  }
+
+  .search-container {
+    flex: 1;
+  }
+}
