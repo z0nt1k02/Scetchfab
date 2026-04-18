@@ -101,6 +101,67 @@
   border-color: #535bf2;
 }
 
+/* ===== Profile ===== */
+.profile-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.profile-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.profile-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #646cff, #a855f7);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.profile-name {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout-container button {
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  color: #fca5a5;
+}
+
+.logout-container button:hover {
+  background-color: rgba(248, 113, 113, 0.12);
+  border-color: #f87171;
+  color: #fecaca;
+}
+
 /* ===== Upload button ===== */
 .upload-container button {
   padding: 8px 20px;
@@ -160,6 +221,14 @@
   .registration-container button {
     padding: 7px 12px;
     font-size: 0.8rem;
+  }
+
+  .profile-name {
+    display: none;
+  }
+
+  .profile-button {
+    padding: 4px;
   }
 }
 

@@ -3,11 +3,18 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginModal from '../../features/auth/LoginModal';
 import RegisterModal from '../../features/auth/RegisterModal';
+import { useAuth } from '../../features/auth/AuthContext';
 
 export default function Header() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   return (
     <>
@@ -26,17 +33,37 @@ export default function Header() {
           </div>
 
           <div className="user-container">
-            <div className="upload-container">
-              <button onClick={() => navigate('/upload')}>Загрузить</button>
-            </div>
-            <div className="login-container">
-              <button onClick={() => setShowLogin(true)}>Войти</button>
-            </div>
-            <div className="registration-container">
-              <button onClick={() => setShowRegister(true)}>
-                Зарегистрироваться
-              </button>
-            </div>
+            {user ? (
+              <>
+                <div className="upload-container">
+                  <button onClick={() => navigate('/upload')}>Загрузить</button>
+                </div>
+                <button
+                  className="profile-button"
+                  onClick={() => navigate('/profile')}
+                  title="Личный кабинет"
+                >
+                  <span className="profile-avatar">
+                    {user.nickname.charAt(0).toUpperCase()}
+                  </span>
+                  <span className="profile-name">{user.nickname}</span>
+                </button>
+                <div className="logout-container">
+                  <button onClick={handleLogout}>Выйти</button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="login-container">
+                  <button onClick={() => setShowLogin(true)}>Войти</button>
+                </div>
+                <div className="registration-container">
+                  <button onClick={() => setShowRegister(true)}>
+                    Зарегистрироваться
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </header>

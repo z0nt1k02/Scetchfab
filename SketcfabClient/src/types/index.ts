@@ -5,11 +5,18 @@ export interface Model {
 }
 
 export interface LoginCredentials {
-  login: string;
+  email: string;
   password: string;
 }
 
 export interface RegisterCredentials {
-  login: string;
+  email: string;
   password: string;
+  nickname: string;
+}
+
+export interface AuthUser {
+  id: string;
+  nickname: string;
+  role?: string;
 }

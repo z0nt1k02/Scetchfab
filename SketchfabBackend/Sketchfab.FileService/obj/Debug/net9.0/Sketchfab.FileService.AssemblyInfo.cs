@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sketchfab.FileService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+faba0e8b903bd321ec3950b3f9f416a5da2e8759")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sketchfab.FileService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sketchfab.FileService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
