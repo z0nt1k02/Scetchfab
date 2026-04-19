@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sketchfab.Application", "Sk
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sketchfab.Core", "Sketchfab.Core\Sketchfab.Core.csproj", "{064DA01C-B389-437B-A350-F288B8A3005F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sketchfab.FileService", "..\Sketchfab.FileService\Sketchfab.FileService.csproj", "{92B516EC-9960-1129-E4ED-3E962A6FD647}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthMicroservice", "..\Sketchfab.AuthMicroservice\AuthMicroservice\AuthMicroservice\AuthMicroservice.csproj", "{52C2FD80-7DB4-336D-EFB7-248EEFE13851}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{064DA01C-B389-437B-A350-F288B8A3005F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{064DA01C-B389-437B-A350-F288B8A3005F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{064DA01C-B389-437B-A350-F288B8A3005F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92B516EC-9960-1129-E4ED-3E962A6FD647}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92B516EC-9960-1129-E4ED-3E962A6FD647}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92B516EC-9960-1129-E4ED-3E962A6FD647}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92B516EC-9960-1129-E4ED-3E962A6FD647}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52C2FD80-7DB4-336D-EFB7-248EEFE13851}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52C2FD80-7DB4-336D-EFB7-248EEFE13851}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52C2FD80-7DB4-336D-EFB7-248EEFE13851}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52C2FD80-7DB4-336D-EFB7-248EEFE13851}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

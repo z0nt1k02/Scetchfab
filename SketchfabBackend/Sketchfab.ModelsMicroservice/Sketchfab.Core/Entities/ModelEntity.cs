@@ -21,6 +21,7 @@ namespace Sketchfab.Core.Entities
         public string ModelName { get; set; } = string.Empty;
         public Guid CreatorId { get; set; }
         public string CreatorName { get; set; } = string.Empty;
+        public string? ViewerConfig { get; set; }
 
         public static ModelEntity Create(string title, string modelName, Guid creatorId, string creatorName)
         {

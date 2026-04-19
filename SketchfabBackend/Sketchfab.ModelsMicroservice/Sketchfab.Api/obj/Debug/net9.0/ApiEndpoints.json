@@ -1,12 +1,76 @@
 [
   {
     "ContainingType": "Sketchfab.Api.Controllers.ModelController",
-    "Method": "GetModel",
-    "RelativePath": "api/Model/getmodel",
+    "Method": "GetModels",
+    "RelativePath": "api/models",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sketchfab.Api.Controllers.ModelController",
+    "Method": "PostModel",
+    "RelativePath": "api/models",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Sketchfab.Application.Dtos.CreateModelDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sketchfab.Api.Controllers.ModelController",
+    "Method": "GetModel",
+    "RelativePath": "api/models/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sketchfab.Api.Controllers.ModelController",
+    "Method": "UpdateViewerConfig",
+    "RelativePath": "api/models/{id}/config",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Sketchfab.Application.Dtos.UpdateViewerConfigDto",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   }
 ]

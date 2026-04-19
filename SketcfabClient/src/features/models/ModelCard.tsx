@@ -26,7 +26,7 @@ export default function ModelCard({ model }: Props) {
           <directionalLight position={[0, 0, 0]} intensity={1} />
           <OrbitControls />
           <Suspense fallback={null}>
-            <FBXModel url={model.fileUrl} />
+            {model.fileUrl && <FBXModel url={model.fileUrl} />}
           </Suspense>
         </Canvas>
       </div>

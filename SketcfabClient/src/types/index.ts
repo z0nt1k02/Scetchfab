@@ -2,6 +2,21 @@ export interface Model {
   id: string;
   title: string;
   fileUrl: string;
+  modelName?: string;
+  viewerConfig?: string | null;
+}
+
+export interface ViewerConfig {
+  camera: {
+    position: [number, number, number];
+    target: [number, number, number];
+    fov?: number;
+  };
+  background: string;
+  ambientIntensity: number;
+  directionalIntensity: number;
+  directionalPosition: [number, number, number];
+  materials: Record<string, { color?: string; textureName?: string }>;
 }
 
 export interface LoginCredentials {
@@ -19,4 +34,13 @@ export interface AuthUser {
   id: string;
   nickname: string;
   role?: string;
+}
+
+export interface Comment {
+  id: string;
+  modelId: string;
+  userId: string;
+  nickname: string;
+  text: string;
+  createdAt: string;
 }

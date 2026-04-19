@@ -291,3 +291,4 @@ C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\
 C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
 C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Diplom\SketchfabBackend\Sketchfab.ModelsMicroservice\Sketchfab.Api\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

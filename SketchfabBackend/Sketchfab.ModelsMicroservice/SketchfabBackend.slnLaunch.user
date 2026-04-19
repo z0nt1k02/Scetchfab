@@ -1,0 +1,21 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "Sketchfab.Api\\Sketchfab.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\Sketchfab.FileService\\Sketchfab.FileService.csproj",
+        "Action": "Start",
+        "DebugTarget": "http"
+      },
+      {
+        "Path": "..\\Sketchfab.AuthMicroservice\\AuthMicroservice\\AuthMicroservice\\AuthMicroservice.csproj",
+        "Action": "Start",
+        "DebugTarget": "http"
+      }
+    ]
+  }
+]

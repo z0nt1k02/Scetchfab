@@ -4515,23 +4515,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Пользователь\\.nuget\\packages\\": {},
+    "C:\\Users\\z0nt1k02\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Diplom\\Scetchfab\\SketchfabBackend\\Sketchfab.FileService\\Sketchfab.FileService.csproj",
+      "projectUniqueName": "C:\\Diplom\\SketchfabBackend\\sketchfab.fileservice\\Sketchfab.FileService.csproj",
       "projectName": "Sketchfab.FileService",
-      "projectPath": "C:\\Diplom\\Scetchfab\\SketchfabBackend\\Sketchfab.FileService\\Sketchfab.FileService.csproj",
-      "packagesPath": "C:\\Users\\Пользователь\\.nuget\\packages\\",
-      "outputPath": "C:\\Diplom\\Scetchfab\\SketchfabBackend\\Sketchfab.FileService\\obj\\",
+      "projectPath": "C:\\Diplom\\SketchfabBackend\\sketchfab.fileservice\\Sketchfab.FileService.csproj",
+      "packagesPath": "C:\\Users\\z0nt1k02\\.nuget\\packages\\",
+      "outputPath": "C:\\Diplom\\SketchfabBackend\\sketchfab.fileservice\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Пользователь\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\z0nt1k02\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -4558,7 +4558,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.200"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net9.0": {
@@ -4628,24 +4628,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[9.0.12, 9.0.12]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[9.0.12, 9.0.12]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[9.0.12, 9.0.12]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[9.0.12, 9.0.12]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -4654,7 +4636,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.200-preview.0.26103.119/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

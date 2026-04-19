@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Diplom/SketchfabBackend/Sketchfab.ModelsMicroservice/**)",
+      "Bash(npx tsc *)",
+      "Read(//c/Diplom/SketchfabBackend/**)",
+      "Bash(dotnet build *)",
+      "Bash(curl -i http://localhost:5105/api/models/92eceb5e-527c-427f-a861-161a92d5494a)"
+    ],
+    "additionalDirectories": [
+      "c:\\Diplom\\SketchfabBackend\\Sketchfab.ModelsMicroservice\\Sketchfab.Application\\Services",
+      "c:\\Diplom\\SketchfabBackend\\Sketchfab.ModelsMicroservice\\Sketchfab.Api\\Controllers",
+      "c:\\Diplom\\SketchfabBackend\\Sketchfab.ModelsMicroservice\\Sketchfab.Application\\Interfaces"
+    ]
+  }
+}

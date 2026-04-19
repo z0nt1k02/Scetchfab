@@ -13,8 +13,22 @@ export const getModel = async (id: string): Promise<Model> => {
   return data;
 };
 
-// Returns presigned S3 URL for file upload
-export const createModel = async (title: string, modelName: string): Promise<string> => {
-  const { data } = await modelsAxios.post<string>('/models', { title, modelName });
+export const createModel = async (
+  title: string,
+  modelName: string,
+  viewerConfig?: string | null
+): Promise<string> => {
+  const { data } = await modelsAxios.post<string>('/models', {
+    title,
+    modelName,
+    viewerConfig: viewerConfig ?? null,
+  });
   return data;
+};
+
+export const updateViewerConfig = async (
+  id: string,
+  viewerConfig: string | null
+): Promise<void> => {
+  await modelsAxios.put(`/models/${id}/config`, { viewerConfig });
 };

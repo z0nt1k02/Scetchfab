@@ -36,7 +36,24 @@ namespace Sketchfab.Api.Controllers
             try
             {
                 var res = await _modelService.DownloadModel(id);
+                if (res == null) return NotFound();
                 return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("models/{id}/config")]
+        public async Task<IActionResult> UpdateViewerConfig(Guid id, [FromBody] UpdateViewerConfigDto dto)
+        {
+            try
+            {
+                var ok = await _modelService.UpdateViewerConfig(id, dto.viewerConfig);
+                if (!ok) return NotFound();
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -55,7 +72,7 @@ namespace Sketchfab.Api.Controllers
                 //string creatorName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)!.ToString();
                 string id = Guid.NewGuid().ToString();
                 string creatorName = "Igor";
-                var res = await _modelService.UploadModel(dto.title, dto.modelName, id,creatorName);
+                var res = await _modelService.UploadModel(dto.title, dto.modelName, id, creatorName, dto.viewerConfig);
                 return Ok(res);
             }
             catch (Exception ex)

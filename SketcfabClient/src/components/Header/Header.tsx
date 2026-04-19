@@ -21,7 +21,7 @@ export default function Header() {
       <header>
         <div className="header-container">
           <div className="logo-container">
-            <h1 onClick={() => navigate('/')}>Sketchfab</h1>
+            <h1 onClick={() => navigate('/')}>Noda</h1>
           </div>
 
           <div className="search-container">

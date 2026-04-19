@@ -1,4 +1,4 @@
-﻿using Sketchfab.Application.Interfaces;
+using Sketchfab.Application.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Sketchfab.Core.Entities;
 using Microsoft.AspNetCore.Http;
@@ -7,17 +7,17 @@ using System.Text.Json;
 using System.Net.Http.Json;
 using Sketchfab.Application.Dtos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
+//using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Sketchfab.Application.Services
 {
-    public class ModelService(IConfiguration configuration, ISketchfabDbContext context, IHttpClientFactory httpClientFactory, IDistributedCache cache,IYandexStorageService yandexStorageService) : IModelService
+    public class ModelService(IConfiguration configuration, ISketchfabDbContext context, IHttpClientFactory httpClientFactory, /*IDistributedCache cache,*/ IYandexStorageService yandexStorageService) : IModelService
     {
         private readonly IConfiguration _configuration = configuration;
         private readonly ISketchfabDbContext _context = context;
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
-        private readonly IDistributedCache _cache = cache;
+        //private readonly IDistributedCache _cache = cache;
         private readonly IYandexStorageService _yandexStorageService = yandexStorageService;
 
         public async Task<List<ShortModelDto>> GetModels(int page,int pageSize)
@@ -44,21 +44,22 @@ namespace Sketchfab.Application.Services
             var result = modelsDb.Select(m =>
             {
                 var modelLink = links.GetValueOrDefault(m.ModelName);
-                return new ShortModelDto(m.Id.ToString(), m.Title, modelLink!, "Игорь");
+                return new ShortModelDto(m.Id.ToString(), m.Title, modelLink!, m.CreatorName, m.ModelName, m.ViewerConfig);
             }).ToList();
 
             return result;
 
         }
-        public async Task<ShortModelDto> DownloadModel(Guid id)
+        public async Task<ShortModelDto?> DownloadModel(Guid id)
         {
-            var model = await _cache.GetAsync(id.ToString());
-            if(model != null)
-            {
-                var serializedModel = JsonSerializer.Deserialize<ShortModelDto>(model)!;
-                return serializedModel;
-            }
-            ModelEntity modelDb = _context.Models.Find(id) ?? throw new NullReferenceException("Модель не найдена");
+            //var cached = await _cache.GetAsync(id.ToString());
+            //if (cached != null)
+            //{
+            //    return JsonSerializer.Deserialize<ShortModelDto>(cached);
+            //}
+            var modelDb = await _context.Models.FindAsync(id);
+            if (modelDb == null) return null;
+
             var client = _httpClientFactory.CreateClient();
             JsonContent content = JsonContent.Create(new { fileName = modelDb.ModelName });
 
@@ -66,8 +67,8 @@ namespace Sketchfab.Application.Services
             if (response.IsSuccessStatusCode)
             {
                 string downloadUrl = await response.Content.ReadAsStringAsync();
-                ShortModelDto dto = new ShortModelDto(modelDb.Id.ToString(), modelDb.Title, downloadUrl, modelDb.CreatorName);
-                await CreateCache(dto);
+                ShortModelDto dto = new ShortModelDto(modelDb.Id.ToString(), modelDb.Title, downloadUrl, modelDb.CreatorName, modelDb.ModelName, modelDb.ViewerConfig);
+                //await CreateCache(id, dto);
                 return dto;
             }
             else
@@ -76,13 +77,23 @@ namespace Sketchfab.Application.Services
             }
         }
 
-        public async Task<string> UploadModel(string title, string modelName, string creatorId,string creatorName)
+        public async Task<bool> UpdateViewerConfig(Guid id, string? viewerConfig)
+        {
+            var entity = await _context.Models.FindAsync(id);
+            if (entity == null) return false;
+            entity.ViewerConfig = viewerConfig;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<string> UploadModel(string title, string modelName, string creatorId, string creatorName, string? viewerConfig = null)
         {
             ModelEntity entity = ModelEntity.Create(title, modelName, Guid.Parse(creatorId), creatorName);
+            entity.ViewerConfig = viewerConfig;
             var client = _httpClientFactory.CreateClient();
-            
+
             JsonContent content = JsonContent.Create(new { fileName = modelName });
-            
+
             var response = await client.PostAsync("http://localhost:5019/api/uploadlink",content);
             if (response.IsSuccessStatusCode)
             {
@@ -97,21 +108,21 @@ namespace Sketchfab.Application.Services
             }
         }
 
-        private async Task CreateCache(List<ShortModelDto> dtos)
-        {
-            var resultJson = JsonSerializer.Serialize(dtos);
-            await _cache.SetAsync("models1page", System.Text.Encoding.UTF8.GetBytes(resultJson), new DistributedCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(20)
-            });
-        }
-        private async Task CreateCache(ShortModelDto dto)
-        {
-            var resultJson = JsonSerializer.Serialize(dto);
-            await _cache.SetAsync("models1page", System.Text.Encoding.UTF8.GetBytes(resultJson), new DistributedCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
-            });
-        }
+        //private async Task CreateCache(List<ShortModelDto> dtos)
+        //{
+        //    var resultJson = JsonSerializer.Serialize(dtos);
+        //    await _cache.SetAsync("models1page", System.Text.Encoding.UTF8.GetBytes(resultJson), new DistributedCacheEntryOptions
+        //    {
+        //        AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(20)
+        //    });
+        //}
+        //private async Task CreateCache(Guid id, ShortModelDto dto)
+        //{
+        //    var resultJson = JsonSerializer.Serialize(dto);
+        //    await _cache.SetAsync(id.ToString(), System.Text.Encoding.UTF8.GetBytes(resultJson), new DistributedCacheEntryOptions
+        //    {
+        //        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
+        //    });
+        //}
     }
 }

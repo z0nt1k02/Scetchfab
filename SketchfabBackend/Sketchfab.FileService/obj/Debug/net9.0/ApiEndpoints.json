@@ -1,0 +1,50 @@
+[
+  {
+    "ContainingType": "Sketchfab.FileService.Controllers.FileLinkController",
+    "Method": "DownloadLink",
+    "RelativePath": "api/downloadlink",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Sketchfab.FileService.Dtos.FileDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sketchfab.FileService.Controllers.FileLinkController",
+    "Method": "UploadLinks",
+    "RelativePath": "api/downloadlinks",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Sketchfab.FileService.Dtos.DownloadLinksRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sketchfab.FileService.Controllers.FileLinkController",
+    "Method": "UploadLink",
+    "RelativePath": "api/uploadlink",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Sketchfab.FileService.Dtos.FileDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

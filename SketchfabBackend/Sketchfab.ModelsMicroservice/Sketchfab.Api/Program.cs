@@ -22,7 +22,7 @@ namespace Sketchfab.Api
                 });
             });
             services.AddHttpClient();
-            services.AddRedisConnection();
+            //services.AddRedisConnection();
             services.AddApiAuthentication(configuration);
             services.AddDbContext<ISketchfabDbContext, SketchfabDbContext>(options =>
             {

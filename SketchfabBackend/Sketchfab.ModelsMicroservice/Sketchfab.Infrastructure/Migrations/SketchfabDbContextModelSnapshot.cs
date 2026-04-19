@@ -43,6 +43,9 @@ namespace Sketchfab.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ViewerConfig")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("Models");

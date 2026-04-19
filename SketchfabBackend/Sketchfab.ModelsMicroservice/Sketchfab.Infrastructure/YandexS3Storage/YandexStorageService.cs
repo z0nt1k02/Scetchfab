@@ -24,8 +24,7 @@ namespace Sketchfab.Infrastructure.YandexS3Storage
             var response = await client.PostAsync("http://localhost:5019/api/downloadlink", content);
             if (response.IsSuccessStatusCode)
             {
-                string downloadUrl = await response.Content.ReadAsStringAsync();
-                return downloadUrl;
+                return await response.Content.ReadAsStringAsync();
             }
             else
             {
@@ -36,25 +35,15 @@ namespace Sketchfab.Infrastructure.YandexS3Storage
         public async Task<Dictionary<string,string>> GetDownloadLinksAsync(List<string> modelNames)
         {
             var client = _httpClientFactory.CreateClient();
-            //var data = new qwe(modelNames);
-            JsonContent content = JsonContent.Create(new { modelNames=modelNames });
-            //JsonContent content = JsonContent.Create(data);
+            JsonContent content = JsonContent.Create(new { modelNames = modelNames });
 
             var response = await client.PostAsync("http://localhost:5019/api/downloadlinks", content);
-
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    //var result = await response.Content.ReadAsStringAsync();
-            //    return await response!.Content!.ReadFromJsonAsync<Dictionary<string, string>>()!;
-            //    //return result;
-            //}
-            //else
-            //{
-            //    throw new Exception(/*"Не удалось получить ссылку для загрузки"*/response.StatusCode.ToString());
-            //}
-            Dictionary<string, string>? result = new();
-            result.Add("1", response.Content.ToString());
-            return result;
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Не удалось получить ссылки для загрузки: " + response.StatusCode);
+            }
+            var result = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
+            return result ?? new Dictionary<string, string>();
         }
 
         public async Task<string> GetUploadLink(string modelName)
