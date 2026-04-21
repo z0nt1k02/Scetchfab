@@ -1,9 +1,65 @@
 .profile-page {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
   padding: 48px 24px;
   min-height: calc(100vh - 64px);
   box-sizing: border-box;
+}
+
+.profile-tabs {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.profile-tab {
+  padding: 12px 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.profile-tab:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.profile-tab.active {
+  color: #a5b4fc;
+  border-bottom-color: #646cff;
+}
+
+.profile-status {
+  padding: 48px 0;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.profile-models-grid {
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.profile-section-title {
+  width: 100%;
+  max-width: 1200px;
+  margin: 12px 0 4px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .profile-card {

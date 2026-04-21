@@ -1,82 +1,116 @@
+import { modelsAxios } from './axios';
 import type { Comment } from '../types';
 
-const LIKES_KEY = 'model_likes';
-const COMMENTS_KEY = 'model_comments';
+export interface LikeState {
+  count: number;
+  liked: boolean;
+}
 
-type LikesMap = Record<string, string[]>;
+export async function getLikeState(
+  modelId: string,
+  userId: string | null
+): Promise<LikeState> {
+  const { data } = await modelsAxios.get<LikeState>(`/models/${modelId}/likes`, {
+    params: userId ? { userId } : undefined,
+  });
+  return data;
+}
 
-function readLikes(): LikesMap {
+export async function toggleLike(
+  modelId: string,
+  userId: string
+): Promise<LikeState> {
+  const { data } = await modelsAxios.post<LikeState>(`/models/${modelId}/like`, {
+    userId,
+  });
+  return data;
+}
+
+interface CommentResponse {
+  id: string;
+  modelId: string;
+  userId: string;
+  nickname: string;
+  text: string;
+  createdAt: string;
+}
+
+export async function getComments(modelId: string): Promise<Comment[]> {
+  const { data } = await modelsAxios.get<CommentResponse[]>(
+    `/models/${modelId}/comments`
+  );
+  return data;
+}
+
+export async function addComment(
+  modelId: string,
+  userId: string,
+  nickname: string,
+  text: string
+): Promise<Comment> {
+  const { data } = await modelsAxios.post<CommentResponse>(
+    `/models/${modelId}/comments`,
+    { userId, nickname, text }
+  );
+  return data;
+}
+
+export async function deleteComment(
+  commentId: string,
+  userId: string
+): Promise<boolean> {
   try {
-    return JSON.parse(localStorage.getItem(LIKES_KEY) ?? '{}');
+    await modelsAxios.delete(`/comments/${commentId}`, { params: { userId } });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function incrementView(modelId: string): Promise<void> {
+  try {
+    await modelsAxios.post(`/models/${modelId}/view`);
+  } catch {
+    /* non-critical */
+  }
+}
+
+export async function incrementDownload(modelId: string): Promise<void> {
+  try {
+    await modelsAxios.post(`/models/${modelId}/download`);
+  } catch {
+    /* non-critical */
+  }
+}
+
+export async function getUserLikedModelIds(userId: string): Promise<string[]> {
+  const { data } = await modelsAxios.get<string[]>(`/users/${userId}/liked`);
+  return data;
+}
+
+const UPLOADS_KEY = 'user_uploads';
+type UploadsMap = Record<string, string[]>;
+
+function readUploads(): UploadsMap {
+  try {
+    return JSON.parse(localStorage.getItem(UPLOADS_KEY) ?? '{}');
   } catch {
     return {};
   }
 }
 
-function writeLikes(likes: LikesMap) {
-  localStorage.setItem(LIKES_KEY, JSON.stringify(likes));
+function writeUploads(uploads: UploadsMap) {
+  localStorage.setItem(UPLOADS_KEY, JSON.stringify(uploads));
 }
 
-function readComments(): Comment[] {
-  try {
-    return JSON.parse(localStorage.getItem(COMMENTS_KEY) ?? '[]');
-  } catch {
-    return [];
-  }
+export function addUserUpload(userId: string, modelId: string) {
+  const uploads = readUploads();
+  const list = uploads[userId] ?? [];
+  if (!list.includes(modelId)) list.push(modelId);
+  uploads[userId] = list;
+  writeUploads(uploads);
 }
 
-function writeComments(comments: Comment[]) {
-  localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
-}
-
-export function getLikeState(modelId: string, userId: string | null) {
-  const likes = readLikes();
-  const users = likes[modelId] ?? [];
-  return { count: users.length, liked: userId ? users.includes(userId) : false };
-}
-
-export function toggleLike(modelId: string, userId: string) {
-  const likes = readLikes();
-  const users = likes[modelId] ?? [];
-  const idx = users.indexOf(userId);
-  if (idx >= 0) users.splice(idx, 1);
-  else users.push(userId);
-  likes[modelId] = users;
-  writeLikes(likes);
-  return { count: users.length, liked: idx < 0 };
-}
-
-export function getComments(modelId: string): Comment[] {
-  return readComments()
-    .filter((c) => c.modelId === modelId)
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-}
-
-export function addComment(
-  modelId: string,
-  userId: string,
-  nickname: string,
-  text: string
-): Comment {
-  const comment: Comment = {
-    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    modelId,
-    userId,
-    nickname,
-    text,
-    createdAt: new Date().toISOString(),
-  };
-  const comments = readComments();
-  comments.push(comment);
-  writeComments(comments);
-  return comment;
-}
-
-export function deleteComment(commentId: string, userId: string): boolean {
-  const comments = readComments();
-  const idx = comments.findIndex((c) => c.id === commentId && c.userId === userId);
-  if (idx < 0) return false;
-  comments.splice(idx, 1);
-  writeComments(comments);
-  return true;
+export function getUserUploads(userId: string): string[] {
+  return readUploads()[userId] ?? [];
 }

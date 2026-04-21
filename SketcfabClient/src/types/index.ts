@@ -4,7 +4,44 @@ export interface Model {
   fileUrl: string;
   modelName?: string;
   viewerConfig?: string | null;
+  previewUrl?: string | null;
+  category?: string | null;
+  tags?: string[];
+  likeCount?: number;
+  commentCount?: number;
+  viewCount?: number;
+  downloadCount?: number;
 }
+
+export interface ImageAsset {
+  id: string;
+  title: string;
+  fileUrl: string;
+  fileName: string;
+  creatorName: string;
+  category?: string | null;
+  tags: string[];
+  viewCount: number;
+  downloadCount: number;
+  likeCount: number;
+  commentCount: number;
+  createdAt: string;
+}
+
+export const IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp'] as const;
+
+export const MODEL_CATEGORIES = [
+  'Персонажи',
+  'Транспорт',
+  'Архитектура',
+  'Природа',
+  'Оружие',
+  'Мебель',
+  'Электроника',
+  'Другое',
+] as const;
+
+export type ModelCategory = (typeof MODEL_CATEGORIES)[number];
 
 export interface ViewerConfig {
   camera: {

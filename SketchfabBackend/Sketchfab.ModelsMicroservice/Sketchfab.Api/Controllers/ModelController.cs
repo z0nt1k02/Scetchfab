@@ -24,9 +24,9 @@ namespace Sketchfab.Api.Controllers
         [HttpGet]
         [Route("models")]
         //[Authorize]
-        public async Task<IActionResult> GetModels([FromQuery] int page, [FromQuery] int pageSize)
+        public async Task<IActionResult> GetModels([FromQuery] int page, [FromQuery] int pageSize, [FromQuery] string? q, [FromQuery] string? category, [FromQuery] string? tag)
         {
-            var res = await _modelService.GetModels(page, pageSize);
+            var res = await _modelService.GetModels(page, pageSize, q, category, tag);
             return Ok(res);
         }
         [HttpGet]
@@ -72,7 +72,7 @@ namespace Sketchfab.Api.Controllers
                 //string creatorName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)!.ToString();
                 string id = Guid.NewGuid().ToString();
                 string creatorName = "Igor";
-                var res = await _modelService.UploadModel(dto.title, dto.modelName, id, creatorName, dto.viewerConfig);
+                var res = await _modelService.UploadModel(dto.title, dto.modelName, id, creatorName, dto.viewerConfig, dto.category, dto.tags);
                 return Ok(res);
             }
             catch (Exception ex)

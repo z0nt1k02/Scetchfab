@@ -1,20 +1,86 @@
-/* ===== Grid ===== */
+.models-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.models-search {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 8px 0 24px;
+  align-items: center;
+}
+
+.models-search-input,
+.models-search-select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: #16213e;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.models-search-input {
+  flex: 1 1 280px;
+  min-width: 240px;
+}
+
+.models-search-tag {
+  flex: 0 1 200px;
+  min-width: 140px;
+}
+
+.models-search-select {
+  flex: 0 1 200px;
+  min-width: 180px;
+  cursor: pointer;
+}
+
+.models-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.models-search-input:focus,
+.models-search-select:focus {
+  border-color: #646cff;
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.models-search-reset {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.models-search-reset:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.95);
+}
+
 .models-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;
-  padding: 32px 24px;
-  max-width: 1400px;
-  margin: 0 auto;
 }
 
-/* ===== States ===== */
 .models-loading,
 .models-empty {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40vh;
+  min-height: 30vh;
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.4);
 }

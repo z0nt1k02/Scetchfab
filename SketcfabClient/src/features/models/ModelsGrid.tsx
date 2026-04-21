@@ -2,32 +2,102 @@ import './ModelsGrid.css';
 import { useState, useEffect } from 'react';
 import ModelCard from './ModelCard';
 import { getModels } from '../../api/modelsApi';
-import type { Model } from '../../types';
+import { MODEL_CATEGORIES, type Model } from '../../types';
 
 export default function ModelsGrid() {
   const [models, setModels] = useState<Model[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [query, setQuery] = useState('');
+  const [category, setCategory] = useState('');
+  const [tag, setTag] = useState('');
+
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [debouncedTag, setDebouncedTag] = useState('');
+
   useEffect(() => {
-    getModels()
+    const t = setTimeout(() => setDebouncedQuery(query.trim()), 300);
+    return () => clearTimeout(t);
+  }, [query]);
+
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedTag(tag.trim()), 300);
+    return () => clearTimeout(t);
+  }, [tag]);
+
+  useEffect(() => {
+    setLoading(true);
+    getModels(1, 50, {
+      q: debouncedQuery || undefined,
+      category: category || undefined,
+      tag: debouncedTag || undefined,
+    })
       .then(setModels)
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, []);
+  }, [debouncedQuery, category, debouncedTag]);
 
-  if (loading) {
-    return <div className="models-loading">Загрузка...</div>;
-  }
+  const resetFilters = () => {
+    setQuery('');
+    setCategory('');
+    setTag('');
+  };
 
-  if (models.length === 0) {
-    return <div className="models-empty">Модели не найдены</div>;
-  }
+  const hasFilters = query || category || tag;
 
   return (
-    <div className="models-grid">
-      {models.map((model) => (
-        <ModelCard key={model.id} model={model} />
-      ))}
+    <div className="models-page">
+      <div className="models-search">
+        <input
+          type="text"
+          className="models-search-input"
+          placeholder="Поиск по названию..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <select
+          className="models-search-select"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="">Все категории</option>
+          {MODEL_CATEGORIES.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
+        <input
+          type="text"
+          className="models-search-input models-search-tag"
+          placeholder="Тег"
+          value={tag}
+          onChange={(e) => setTag(e.target.value)}
+        />
+        {hasFilters && (
+          <button
+            type="button"
+            className="models-search-reset"
+            onClick={resetFilters}
+          >
+            Сбросить
+          </button>
+        )}
+      </div>
+
+      {loading ? (
+        <div className="models-loading">Загрузка...</div>
+      ) : models.length === 0 ? (
+        <div className="models-empty">
+          {hasFilters ? 'Ничего не найдено' : 'Модели не найдены'}
+        </div>
+      ) : (
+        <div className="models-grid">
+          {models.map((model) => (
+            <ModelCard key={model.id} model={model} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

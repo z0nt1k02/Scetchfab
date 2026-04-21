@@ -92,6 +92,115 @@
   font-size: 0.9rem;
 }
 
+.upload-kind-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  max-width: 720px;
+}
+
+.upload-kind-card {
+  flex: 1 1 260px;
+  min-width: 240px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 32px 24px;
+  border-radius: 16px;
+  border: 2px solid rgba(100, 108, 255, 0.25);
+  background-color: rgba(100, 108, 255, 0.05);
+  color: rgba(255, 255, 255, 0.9);
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s, transform 0.1s;
+}
+
+.upload-kind-card:hover {
+  border-color: #646cff;
+  background-color: rgba(100, 108, 255, 0.1);
+}
+
+.upload-kind-card:active {
+  transform: scale(0.99);
+}
+
+.upload-kind-icon {
+  width: 64px;
+  height: 64px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #646cff, #a855f7);
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.upload-kind-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.upload-kind-hint {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
+}
+
+.upload-image-preview {
+  width: 100%;
+  max-width: 560px;
+  max-height: 400px;
+  background-color: #0f1a33;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-image-preview img {
+  max-width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  display: block;
+}
+
+.upload-image-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 560px;
+  padding: 24px;
+  background-color: #16213e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.upload-image-form .editor-field input[type='text'] {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.upload-image-form .editor-field input[type='text']:focus {
+  border-color: #646cff;
+}
+
 .upload-cancel-link {
   background: transparent;
   border: none;

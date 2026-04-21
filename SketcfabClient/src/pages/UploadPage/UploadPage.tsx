@@ -8,7 +8,7 @@ import {
   useCallback,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Canvas, useLoader } from '@react-three/fiber';
+import { Canvas, useLoader, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
@@ -16,7 +16,12 @@ import * as THREE from 'three';
 import JSZip from 'jszip';
 import axios from 'axios';
 import { createModel } from '../../api/modelsApi';
-import type { ViewerConfig } from '../../types';
+import { addUserUpload } from '../../api/interactionsApi';
+import { useAuth } from '../../features/auth/AuthContext';
+import { MODEL_CATEGORIES, type ViewerConfig } from '../../types';
+import UploadImageForm from './UploadImageForm';
+
+type AssetKind = 'model' | 'image' | null;
 
 const MODEL_EXTENSIONS = ['fbx', 'zip'] as const;
 const IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg'] as const;
@@ -111,9 +116,24 @@ function FBXScene({
   return <primitive object={obj} scale={0.01} />;
 }
 
+type CaptureFn = () => Promise<Blob | null>;
+
+function CaptureBridge({ onReady }: { onReady: (fn: CaptureFn) => void }) {
+  const { gl, scene, camera } = useThree();
+  useEffect(() => {
+    const capture: CaptureFn = () =>
+      new Promise((resolve) => {
+        gl.render(scene, camera);
+        gl.domElement.toBlob((blob) => resolve(blob), 'image/png');
+      });
+    onReady(capture);
+  }, [gl, scene, camera, onReady]);
+  return null;
+}
+
 export default function UploadPage() {
+  const [assetKind, setAssetKind] = useState<AssetKind>(null);
   const [modelFile, setModelFile] = useState<File | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [fileError, setFileError] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -129,12 +149,17 @@ export default function UploadPage() {
   const [ambientIntensity, setAmbientIntensity] = useState(0.6);
   const [directionalIntensity, setDirectionalIntensity] = useState(1);
 
+  const [category, setCategory] = useState<string>('');
+  const [tagsInput, setTagsInput] = useState('');
+
   const materialOverridesRef = useRef<
     Record<string, { color?: string; textureName?: string }>
   >({});
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
+  const captureRef = useRef<CaptureFn | null>(null);
 
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     if (!modelFile) {
@@ -259,7 +284,6 @@ export default function UploadPage() {
 
   const resetModel = () => {
     setModelFile(null);
-    setImageFile(null);
     setTitle('');
     setFileError('');
     materialOverridesRef.current = {};
@@ -287,22 +311,39 @@ export default function UploadPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!modelFile || !imageFile || !title) return;
-
-    const imgExt = getExtension(imageFile.name);
-    if (!(IMAGE_EXTENSIONS as readonly string[]).includes(imgExt)) {
-      alert('Изображение должно быть .png или .jpeg');
+    if (!modelFile || !title) return;
+    if (!captureRef.current) {
+      alert('Сцена ещё не готова для снимка');
       return;
     }
 
     setSubmitting(true);
     try {
+      const previewBlob = await captureRef.current();
+      if (!previewBlob) throw new Error('Не удалось сделать снимок сцены');
+
       const config = buildViewerConfig();
       const configJson = JSON.stringify(config);
-      const uploadUrl = await createModel(title, modelFile.name, configJson);
-      await axios.put(uploadUrl, modelFile, {
-        headers: { 'Content-Type': 'application/octet-stream' },
+      const tags = tagsInput
+        .split(',')
+        .map((t) => t.trim())
+        .filter(Boolean);
+      const res = await createModel(title, modelFile.name, {
+        viewerConfig: configJson,
+        category: category || null,
+        tags,
       });
+
+      await Promise.all([
+        axios.put(res.model, modelFile, {
+          headers: { 'Content-Type': 'application/octet-stream' },
+        }),
+        axios.put(res.preview, previewBlob, {
+          headers: { 'Content-Type': 'image/png' },
+        }),
+      ]);
+
+      if (user) addUserUpload(user.id, res.id);
       navigate('/');
     } catch (error) {
       console.error('Ошибка при загрузке:', error);
@@ -311,6 +352,45 @@ export default function UploadPage() {
       setSubmitting(false);
     }
   };
+
+  if (!assetKind) {
+    return (
+      <main className="upload-stage-picker">
+        <h1 className="upload-title">Что загружаем?</h1>
+        <div className="upload-kind-row">
+          <button
+            type="button"
+            className="upload-kind-card"
+            onClick={() => setAssetKind('model')}
+          >
+            <div className="upload-kind-icon">3D</div>
+            <div className="upload-kind-title">3D модель</div>
+            <div className="upload-kind-hint">.fbx или .zip — редактор сцены</div>
+          </button>
+          <button
+            type="button"
+            className="upload-kind-card"
+            onClick={() => setAssetKind('image')}
+          >
+            <div className="upload-kind-icon">2D</div>
+            <div className="upload-kind-title">2D изображение</div>
+            <div className="upload-kind-hint">png, jpg, jpeg, webp, gif, bmp</div>
+          </button>
+        </div>
+        <button
+          type="button"
+          className="upload-cancel-link"
+          onClick={() => navigate('/')}
+        >
+          Отмена
+        </button>
+      </main>
+    );
+  }
+
+  if (assetKind === 'image') {
+    return <UploadImageForm onBack={() => setAssetKind(null)} />;
+  }
 
   if (!modelFile) {
     return (
@@ -327,16 +407,16 @@ export default function UploadPage() {
             Выберите модель (.fbx) или архив (.zip)
           </div>
           <div className="upload-dropzone-hint">
-            Редактор откроется после выбора файла
+            Превью сгенерируется автоматически из сцены
           </div>
         </label>
         {fileError && <div className="upload-file-error">{fileError}</div>}
         <button
           type="button"
           className="upload-cancel-link"
-          onClick={() => navigate('/')}
+          onClick={() => setAssetKind(null)}
         >
-          Отмена
+          Назад
         </button>
       </main>
     );
@@ -368,12 +448,16 @@ export default function UploadPage() {
       <div className="editor-fullscreen-body">
         <div className="editor-viewer" style={{ background }}>
           {fbxUrl && (
-            <Canvas camera={{ position: [0, 1, 3], fov: 50 }}>
+            <Canvas
+              camera={{ position: [0, 1, 3], fov: 50 }}
+              gl={{ preserveDrawingBuffer: true }}
+            >
               <color attach="background" args={[background]} />
               <ambientLight intensity={ambientIntensity} />
               <directionalLight position={[5, 5, 5]} intensity={directionalIntensity} />
               <directionalLight position={[-5, 3, -5]} intensity={0.4} />
               <OrbitControls ref={controlsRef} />
+              <CaptureBridge onReady={(fn) => (captureRef.current = fn)} />
               <Suspense fallback={null}>
                 <FBXScene
                   url={fbxUrl}
@@ -514,26 +598,41 @@ export default function UploadPage() {
               />
             </label>
 
-            <div className="editor-field">
-              <span>Превью (.png, .jpeg)</span>
-              <label className="file-upload">
-                <input
-                  type="file"
-                  accept=".png,.jpeg,.jpg"
-                  onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
-                  required
-                />
-                <span className="file-button">
-                  {imageFile ? imageFile.name : 'Выберите файл'}
-                </span>
-              </label>
+            <label className="editor-field">
+              <span>Категория</span>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="editor-select"
+              >
+                <option value="">— без категории —</option>
+                {MODEL_CATEGORIES.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="editor-field">
+              <span>Теги (через запятую)</span>
+              <input
+                type="text"
+                value={tagsInput}
+                onChange={(e) => setTagsInput(e.target.value)}
+                placeholder="low-poly, pbr, animated"
+              />
+            </label>
+
+            <div className="editor-panel-muted">
+              Превью будет сгенерировано автоматически из текущего ракурса
             </div>
 
             <div className="actions">
               <button
                 type="submit"
                 className="send-button"
-                disabled={submitting || !imageFile || !title}
+                disabled={submitting || !title}
               >
                 {submitting ? 'Загрузка...' : 'Сохранить'}
               </button>

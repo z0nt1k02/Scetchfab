@@ -14,6 +14,8 @@ import {
   getComments,
   addComment,
   deleteComment,
+  incrementView,
+  incrementDownload,
 } from '../../api/interactionsApi';
 import { useAuth } from '../../features/auth/AuthContext';
 import LoginModal from '../../features/auth/LoginModal';
@@ -139,6 +141,8 @@ export default function ModelPage() {
 
   const [likeCount, setLikeCount] = useState(0);
   const [liked, setLiked] = useState(false);
+  const [viewCount, setViewCount] = useState(0);
+  const [downloadCount, setDownloadCount] = useState(0);
 
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentText, setCommentText] = useState('');
@@ -155,19 +159,36 @@ export default function ModelPage() {
     if (!id) return;
     setLoading(true);
     getModel(id)
-      .then(setModel)
+      .then((m) => {
+        setModel(m);
+        setViewCount((m.viewCount ?? 0) + 1);
+        setDownloadCount(m.downloadCount ?? 0);
+      })
       .catch((err) => {
         console.error('getModel failed:', err?.response?.status, err?.response?.data, err);
       })
       .finally(() => setLoading(false));
+    incrementView(id);
   }, [id]);
 
   useEffect(() => {
     if (!id) return;
-    const state = getLikeState(id, user?.id ?? null);
-    setLikeCount(state.count);
-    setLiked(state.liked);
-    setComments(getComments(id));
+    let cancelled = false;
+    getLikeState(id, user?.id ?? null)
+      .then((state) => {
+        if (cancelled) return;
+        setLikeCount(state.count);
+        setLiked(state.liked);
+      })
+      .catch(console.error);
+    getComments(id)
+      .then((list) => {
+        if (!cancelled) setComments(list);
+      })
+      .catch(console.error);
+    return () => {
+      cancelled = true;
+    };
   }, [id, user?.id]);
 
   useEffect(() => {
@@ -223,13 +244,15 @@ export default function ModelPage() {
   }, [config, viewerUrl]);
 
   const handleDownload = () => {
-    if (!model?.fileUrl) return;
+    if (!model?.fileUrl || !id) return;
     const link = document.createElement('a');
     link.href = model.fileUrl;
     link.setAttribute('download', model.modelName ?? 'model.fbx');
     document.body.appendChild(link);
     link.click();
     link.remove();
+    setDownloadCount((c) => c + 1);
+    incrementDownload(id);
   };
 
   const requireAuth = (): boolean => {
@@ -238,27 +261,38 @@ export default function ModelPage() {
     return false;
   };
 
-  const handleLike = () => {
+  const handleLike = async () => {
     if (!id || !requireAuth() || !user) return;
-    const next = toggleLike(id, user.id);
-    setLikeCount(next.count);
-    setLiked(next.liked);
+    try {
+      const next = await toggleLike(id, user.id);
+      setLikeCount(next.count);
+      setLiked(next.liked);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleSubmitComment = (e: React.FormEvent) => {
+  const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!id || !requireAuth() || !user) return;
     const text = commentText.trim();
     if (!text) return;
-    addComment(id, user.id, user.nickname, text);
-    setComments(getComments(id));
-    setCommentText('');
+    try {
+      await addComment(id, user.id, user.nickname, text);
+      const list = await getComments(id);
+      setComments(list);
+      setCommentText('');
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleDeleteComment = (commentId: string) => {
+  const handleDeleteComment = async (commentId: string) => {
     if (!id || !user) return;
-    if (deleteComment(commentId, user.id)) {
-      setComments(getComments(id));
+    const ok = await deleteComment(commentId, user.id);
+    if (ok) {
+      const list = await getComments(id);
+      setComments(list);
     }
   };
 
@@ -292,7 +326,23 @@ export default function ModelPage() {
     <div className="modelView-page">
       <div className="modelView-card">
         <h1 className="modelView-title">{model.title}</h1>
-        <div className="modelView-meta">ID: {model.id}</div>
+
+        <div className="modelView-stats">
+          <span className="stat-chip" title="Просмотры">👁 {viewCount}</span>
+          <span className="stat-chip" title="Скачивания">⬇ {downloadCount}</span>
+          <span className="stat-chip" title="Комментарии">💬 {comments.length}</span>
+        </div>
+
+        {(model.category || (model.tags && model.tags.length > 0)) && (
+          <div className="modelView-chips">
+            {model.category && (
+              <span className="chip chip-category">{model.category}</span>
+            )}
+            {model.tags?.map((t) => (
+              <span key={t} className="chip chip-tag">#{t}</span>
+            ))}
+          </div>
+        )}
 
         <div className="modelView-viewer" style={{ background }}>
           <Canvas camera={{ position: camPos, fov: camFov }}>

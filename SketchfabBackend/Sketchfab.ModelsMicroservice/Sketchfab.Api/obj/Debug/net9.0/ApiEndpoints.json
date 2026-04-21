@@ -1,5 +1,26 @@
 [
   {
+    "ContainingType": "Sketchfab.Api.Controllers.InteractionController",
+    "Method": "DeleteComment",
+    "RelativePath": "api/comments/{commentId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "commentId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Sketchfab.Api.Controllers.ModelController",
     "Method": "GetModels",
     "RelativePath": "api/models",
@@ -15,6 +36,21 @@
       {
         "Name": "pageSize",
         "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "q",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "category",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "tag",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],
@@ -53,6 +89,43 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Sketchfab.Api.Controllers.InteractionController",
+    "Method": "GetComments",
+    "RelativePath": "api/models/{id}/comments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sketchfab.Api.Controllers.InteractionController",
+    "Method": "AddComment",
+    "RelativePath": "api/models/{id}/comments",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Sketchfab.Application.Dtos.CreateCommentDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Sketchfab.Api.Controllers.ModelController",
     "Method": "UpdateViewerConfig",
     "RelativePath": "api/models/{id}/config",
@@ -68,6 +141,96 @@
       {
         "Name": "dto",
         "Type": "Sketchfab.Application.Dtos.UpdateViewerConfigDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sketchfab.Api.Controllers.InteractionController",
+    "Method": "IncrementDownload",
+    "RelativePath": "api/models/{id}/download",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sketchfab.Api.Controllers.InteractionController",
+    "Method": "ToggleLike",
+    "RelativePath": "api/models/{id}/like",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Sketchfab.Application.Dtos.ToggleLikeDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sketchfab.Api.Controllers.InteractionController",
+    "Method": "GetLikes",
+    "RelativePath": "api/models/{id}/likes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "userId",
+        "Type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sketchfab.Api.Controllers.InteractionController",
+    "Method": "IncrementView",
+    "RelativePath": "api/models/{id}/view",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sketchfab.Api.Controllers.InteractionController",
+    "Method": "GetLikedModels",
+    "RelativePath": "api/users/{userId}/liked",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],

@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace Sketchfab.Application.Dtos
 {
-   public record class CreateModelDto(string title, string modelName, string? viewerConfig = null);
+   public record class CreateModelDto(string title, string modelName, string? viewerConfig = null, string? category = null, List<string>? tags = null);
     
 }

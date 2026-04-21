@@ -1,0 +1,30 @@
+.home-tabs {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 24px 0;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.home-tab {
+  padding: 12px 24px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.home-tab:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.home-tab.active {
+  color: #a5b4fc;
+  border-bottom-color: #646cff;
+}

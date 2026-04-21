@@ -7,74 +7,115 @@ using System.Text.Json;
 using System.Net.Http.Json;
 using Sketchfab.Application.Dtos;
 using Microsoft.EntityFrameworkCore;
-//using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Sketchfab.Application.Services
 {
-    public class ModelService(IConfiguration configuration, ISketchfabDbContext context, IHttpClientFactory httpClientFactory, /*IDistributedCache cache,*/ IYandexStorageService yandexStorageService) : IModelService
+    public class ModelService(IConfiguration configuration, ISketchfabDbContext context, IHttpClientFactory httpClientFactory, IYandexStorageService yandexStorageService) : IModelService
     {
         private readonly IConfiguration _configuration = configuration;
         private readonly ISketchfabDbContext _context = context;
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
-        //private readonly IDistributedCache _cache = cache;
         private readonly IYandexStorageService _yandexStorageService = yandexStorageService;
 
-        public async Task<List<ShortModelDto>> GetModels(int page,int pageSize)
+        public async Task<List<ShortModelDto>> GetModels(int page, int pageSize, string? q = null, string? category = null, string? tag = null)
         {
-            //var models = await _cache.GetAsync("models1page");
-            //if(models != null)
-            //{
-            //    var cachedModels = JsonSerializer.Deserialize<List<ShortModelDto>>(models);
-            //    if (cachedModels != null)
-            //    {
-            //        return cachedModels;
-            //    }
-            //}
-            var modelsDb = await _context.Models
+            var query = _context.Models.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                var needle = q.Trim().ToLower();
+                query = query.Where(m => m.Title.ToLower().Contains(needle));
+            }
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                query = query.Where(m => m.Category == category);
+            }
+            if (!string.IsNullOrWhiteSpace(tag))
+            {
+                query = query.Where(m => m.Tags.Contains(tag));
+            }
+
+            var modelsDb = await query
                 .OrderBy(m => m.Id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
-            Console.WriteLine();
-            var links = await _yandexStorageService.GetDownloadLinksAsync(modelsDb.Select(m => m.ModelName).ToList());
 
-            //Console.WriteLine(links["Yaroslavl.fbx"]);
+            var allNames = modelsDb.Select(m => m.ModelName)
+                .Concat(modelsDb.Where(m => m.PreviewName != null).Select(m => m.PreviewName!))
+                .Distinct()
+                .ToList();
+
+            var links = allNames.Count > 0
+                ? await _yandexStorageService.GetDownloadLinksAsync(allNames)
+                : new Dictionary<string, string>();
+
+            var ids = modelsDb.Select(m => m.Id).ToList();
+            var likeCounts = await _context.Likes
+                .Where(l => ids.Contains(l.ModelId))
+                .GroupBy(l => l.ModelId)
+                .Select(g => new { ModelId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.ModelId, x => x.Count);
+            var commentCounts = await _context.Comments
+                .Where(c => ids.Contains(c.ModelId))
+                .GroupBy(c => c.ModelId)
+                .Select(g => new { ModelId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.ModelId, x => x.Count);
 
             var result = modelsDb.Select(m =>
             {
                 var modelLink = links.GetValueOrDefault(m.ModelName);
-                return new ShortModelDto(m.Id.ToString(), m.Title, modelLink!, m.CreatorName, m.ModelName, m.ViewerConfig);
+                var previewLink = m.PreviewName != null ? links.GetValueOrDefault(m.PreviewName) : null;
+                return new ShortModelDto(
+                    m.Id.ToString(),
+                    m.Title,
+                    modelLink!,
+                    m.CreatorName,
+                    m.ModelName,
+                    m.ViewerConfig,
+                    previewLink,
+                    m.Category,
+                    m.Tags,
+                    likeCounts.GetValueOrDefault(m.Id, 0),
+                    commentCounts.GetValueOrDefault(m.Id, 0),
+                    m.ViewCount,
+                    m.DownloadCount);
             }).ToList();
 
             return result;
-
         }
+
         public async Task<ShortModelDto?> DownloadModel(Guid id)
         {
-            //var cached = await _cache.GetAsync(id.ToString());
-            //if (cached != null)
-            //{
-            //    return JsonSerializer.Deserialize<ShortModelDto>(cached);
-            //}
             var modelDb = await _context.Models.FindAsync(id);
             if (modelDb == null) return null;
 
-            var client = _httpClientFactory.CreateClient();
-            JsonContent content = JsonContent.Create(new { fileName = modelDb.ModelName });
+            var names = new List<string> { modelDb.ModelName };
+            if (modelDb.PreviewName != null) names.Add(modelDb.PreviewName);
 
-            var response = await client.PostAsync("http://localhost:5019/api/downloadlink", content);
-            if (response.IsSuccessStatusCode)
-            {
-                string downloadUrl = await response.Content.ReadAsStringAsync();
-                ShortModelDto dto = new ShortModelDto(modelDb.Id.ToString(), modelDb.Title, downloadUrl, modelDb.CreatorName, modelDb.ModelName, modelDb.ViewerConfig);
-                //await CreateCache(id, dto);
-                return dto;
-            }
-            else
-            {
-                throw new Exception("Не удалось получить ссылку для загрузки");
-            }
+            var links = await _yandexStorageService.GetDownloadLinksAsync(names);
+            var modelUrl = links.GetValueOrDefault(modelDb.ModelName)
+                ?? throw new Exception("Не удалось получить ссылку для загрузки");
+            var previewUrl = modelDb.PreviewName != null ? links.GetValueOrDefault(modelDb.PreviewName) : null;
+
+            var likeCount = await _context.Likes.CountAsync(l => l.ModelId == modelDb.Id);
+            var commentCount = await _context.Comments.CountAsync(c => c.ModelId == modelDb.Id);
+
+            return new ShortModelDto(
+                modelDb.Id.ToString(),
+                modelDb.Title,
+                modelUrl,
+                modelDb.CreatorName,
+                modelDb.ModelName,
+                modelDb.ViewerConfig,
+                previewUrl,
+                modelDb.Category,
+                modelDb.Tags,
+                likeCount,
+                commentCount,
+                modelDb.ViewCount,
+                modelDb.DownloadCount);
         }
 
         public async Task<bool> UpdateViewerConfig(Guid id, string? viewerConfig)
@@ -86,43 +127,28 @@ namespace Sketchfab.Application.Services
             return true;
         }
 
-        public async Task<string> UploadModel(string title, string modelName, string creatorId, string creatorName, string? viewerConfig = null)
+        public async Task<Dictionary<string, string>> UploadModel(string title, string modelName, string creatorId, string creatorName, string? viewerConfig = null, string? category = null, List<string>? tags = null)
         {
             ModelEntity entity = ModelEntity.Create(title, modelName, Guid.Parse(creatorId), creatorName);
             entity.ViewerConfig = viewerConfig;
-            var client = _httpClientFactory.CreateClient();
+            entity.Category = category;
+            entity.Tags = tags ?? new List<string>();
 
-            JsonContent content = JsonContent.Create(new { fileName = modelName });
+            var previewName = $"{entity.Id}_preview.png";
+            entity.PreviewName = previewName;
 
-            var response = await client.PostAsync("http://localhost:5019/api/uploadlink",content);
-            if (response.IsSuccessStatusCode)
+            var modelUploadUrl = await _yandexStorageService.GetUploadLink(modelName);
+            var previewUploadUrl = await _yandexStorageService.GetUploadLink(previewName);
+
+            await _context.Models.AddAsync(entity);
+            await _context.SaveChangesAsync();
+
+            return new Dictionary<string, string>
             {
-                string result = await response.Content.ReadAsStringAsync();
-                await _context.Models.AddAsync(entity);
-                await _context.SaveChangesAsync();
-                return result;
-            }
-            else
-            {
-                throw new Exception("Не удалось получить ссылку для загрузки");
-            }
+                ["model"] = modelUploadUrl,
+                ["preview"] = previewUploadUrl,
+                ["id"] = entity.Id.ToString()
+            };
         }
-
-        //private async Task CreateCache(List<ShortModelDto> dtos)
-        //{
-        //    var resultJson = JsonSerializer.Serialize(dtos);
-        //    await _cache.SetAsync("models1page", System.Text.Encoding.UTF8.GetBytes(resultJson), new DistributedCacheEntryOptions
-        //    {
-        //        AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(20)
-        //    });
-        //}
-        //private async Task CreateCache(Guid id, ShortModelDto dto)
-        //{
-        //    var resultJson = JsonSerializer.Serialize(dto);
-        //    await _cache.SetAsync(id.ToString(), System.Text.Encoding.UTF8.GetBytes(resultJson), new DistributedCacheEntryOptions
-        //    {
-        //        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
-        //    });
-        //}
     }
 }

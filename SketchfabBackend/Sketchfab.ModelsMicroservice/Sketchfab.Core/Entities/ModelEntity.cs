@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +22,11 @@ namespace Sketchfab.Core.Entities
         public Guid CreatorId { get; set; }
         public string CreatorName { get; set; } = string.Empty;
         public string? ViewerConfig { get; set; }
+        public string? PreviewName { get; set; }
+        public string? Category { get; set; }
+        public List<string> Tags { get; set; } = new();
+        public int ViewCount { get; set; }
+        public int DownloadCount { get; set; }
 
         public static ModelEntity Create(string title, string modelName, Guid creatorId, string creatorName)
         {

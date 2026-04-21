@@ -22,12 +22,58 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
+.modelView-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.chip-category {
+  background-color: rgba(100, 108, 255, 0.85);
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.3px;
+}
+
+.chip-tag {
+  background-color: rgba(100, 108, 255, 0.12);
+  border: 1px solid rgba(100, 108, 255, 0.3);
+  color: #a5b4fc;
+}
+
 .modelView-title {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.92);
   word-break: break-word;
+}
+
+.modelView-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+
+.stat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.75);
+  font-variant-numeric: tabular-nums;
 }
 
 .modelView-meta {
