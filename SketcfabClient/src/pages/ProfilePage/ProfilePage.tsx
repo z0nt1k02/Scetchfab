@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../features/auth/AuthContext';
 import { getModels } from '../../api/modelsApi';
 import { getImages } from '../../api/imageAssetsApi';
@@ -161,7 +161,17 @@ export default function ProfilePage() {
               </h3>
               <div className="profile-models-grid">
                 {activeModels.map((m) => (
-                  <ModelCard key={m.id} model={m} />
+                  <div key={m.id} className="profile-card-wrap">
+                    <ModelCard model={m} />
+                    {tab === 'uploads' && (
+                      <Link
+                        to={`/profile/stats/model/${m.id}`}
+                        className="profile-card-stats-link"
+                      >
+                        📊 Подробная статистика
+                      </Link>
+                    )}
+                  </div>
                 ))}
               </div>
             </>
@@ -173,7 +183,17 @@ export default function ProfilePage() {
               </h3>
               <div className="profile-models-grid">
                 {activeImages.map((i) => (
-                  <ImageCard key={i.id} image={i} />
+                  <div key={i.id} className="profile-card-wrap">
+                    <ImageCard image={i} />
+                    {tab === 'uploads' && (
+                      <Link
+                        to={`/profile/stats/image/${i.id}`}
+                        className="profile-card-stats-link"
+                      >
+                        📊 Подробная статистика
+                      </Link>
+                    )}
+                  </div>
                 ))}
               </div>
             </>

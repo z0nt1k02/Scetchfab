@@ -1,28 +1,26 @@
 .models-page {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 24px;
+  width: 100%;
 }
 
 .models-search {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 8px 0 24px;
+  padding: 4px 0 20px;
   align-items: center;
 }
 
 .models-search-input,
 .models-search-select {
   padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background-color: #16213e;
-  color: rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text);
   font-family: inherit;
   font-size: 0.9rem;
   outline: none;
-  transition: border-color 0.2s, background-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .models-search-input {
@@ -42,21 +40,21 @@
 }
 
 .models-search-input::placeholder {
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-faint);
 }
 
 .models-search-input:focus,
 .models-search-select:focus {
-  border-color: #646cff;
-  background-color: rgba(255, 255, 255, 0.04);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .models-search-reset {
   padding: 10px 16px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background-color: transparent;
-  color: rgba(255, 255, 255, 0.75);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-strong);
+  background-color: var(--surface);
+  color: var(--text-muted);
   font-family: inherit;
   font-size: 0.85rem;
   cursor: pointer;
@@ -64,15 +62,15 @@
 }
 
 .models-search-reset:hover {
-  background-color: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.4);
-  color: rgba(255, 255, 255, 0.95);
+  background-color: var(--surface-3);
+  border-color: var(--accent);
+  color: var(--text);
 }
 
 .models-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
+  gap: 20px;
 }
 
 .models-loading,
@@ -81,6 +79,6 @@
   align-items: center;
   justify-content: center;
   min-height: 30vh;
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.4);
+  font-size: 1rem;
+  color: var(--text-soft);
 }

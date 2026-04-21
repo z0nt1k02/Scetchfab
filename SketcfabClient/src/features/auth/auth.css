@@ -2,7 +2,8 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,13 +12,13 @@
 
 /* ===== Modal box ===== */
 .modal-content {
-  background-color: #16213e;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   padding: 32px 28px;
   width: 100%;
-  max-width: 380px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  max-width: 400px;
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -26,8 +27,8 @@
 .modal-content h2 {
   margin: 0;
   font-size: 1.3rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  font-weight: 700;
+  color: var(--text);
 }
 
 .modal-content form {
@@ -38,43 +39,49 @@
 
 .modal-content input {
   padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background-color: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.87);
-  font-size: 0.9rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background-color: var(--surface-2);
+  color: var(--text);
+  font-size: 0.92rem;
   font-family: inherit;
   outline: none;
-  transition: border-color 0.2s, background-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .modal-content input::placeholder {
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-faint);
 }
 
 .modal-content input:focus {
-  border-color: #646cff;
-  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent);
+  background-color: var(--surface);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .modal-content button[type='submit'] {
-  padding: 10px;
+  padding: 11px;
   border: none;
-  border-radius: 8px;
-  background-color: #646cff;
+  border-radius: var(--radius-md);
+  background-color: var(--accent);
   color: #fff;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 0.92rem;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
   margin-top: 4px;
+  box-shadow: 0 4px 12px rgba(91, 108, 255, 0.25);
 }
 
 .modal-content button[type='submit']:hover {
-  background-color: #535bf2;
+  background-color: var(--accent-hover);
 }
 
 .modal-error {
-  color: #f87171;
+  color: var(--danger);
   font-size: 0.85rem;
+  padding: 8px 10px;
+  background-color: var(--danger-soft);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(225, 29, 72, 0.2);
 }
